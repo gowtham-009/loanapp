@@ -20,19 +20,19 @@
           <span class="text-h5">New User</span>
         </div>
 
-        <div class="pa-1 " :style="{ height: box2Height + 'px' }">
+        <div class="pa-2 " :style="{ height: box2Height + 'px' }">
 
           <v-text-field v-model="phoneNumber" label="Mobile Number" variant="solo-filled" @input="validateInput"
             :rules="[validateLength]" maxlength="10"></v-text-field>
 
-          <div class="options " style=" margin-top: -15px;">
+          <div class="options " style=" margin-top: -8px;">
             <p class="text-left">Select ID Proof</p>
             <CheckboxButton v-for="option in options" :key="option.value" :name="'proof-type'" :label="option.label"
               :value="option.value" v-model="selectedOption" class="pa-1"/>
           </div>
 
           <v-text-field variant="solo-filled"  v-model="proofid" :counter="16" :rules="proofRules"
-            label="Proof ID / Number" placeholder="Enter Unique ID Number" hide-details class="w-100"
+            label="Proof ID / Number" placeholder="Enter Unique ID Number" hide-details class="w-100 mt-2"
             @input="proofid = proofid.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 16)"></v-text-field>
 
 
@@ -140,7 +140,7 @@ const validateInput = () => {
 };
 
 const validateLength = () => {
-  return phoneNumber.value.length === 10 || "Number must be exactly 10 digits";
+  return phoneNumber.value.length === 10 ;
 };
 
 const getFormattedDateTime = () => {
