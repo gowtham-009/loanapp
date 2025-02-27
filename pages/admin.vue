@@ -332,6 +332,11 @@ const categoriesfilter_data = async () => {
   }
 };
 
+
+const edit_record=(rocored_id)=>{
+  
+
+}
 // tab-2 section
 const addoptions = ref([
   { label: 'Gold', value: 'Gold' },
