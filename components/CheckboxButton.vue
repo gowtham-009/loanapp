@@ -80,7 +80,7 @@ export default {
   justify-content: center;
   align-items: center; /* Align icon and text */
   background-color: #ccc;
-  padding: 5px 15px;
+  padding: 8px 15px;
   color: white;
   border-radius: 20px;
   font-size: 12px;

@@ -25,7 +25,7 @@
           <v-text-field v-model="phoneNumber" label="Mobile Number" variant="solo-filled" @input="validateInput"
             :rules="[validateLength]" maxlength="10"></v-text-field>
 
-          <div class="options " style="border: 1px solid red; margin-top: -15px;">
+          <div class="options " style=" margin-top: -15px;">
             <p class="text-left">Select ID Proof</p>
             <CheckboxButton v-for="option in options" :key="option.value" :name="'proof-type'" :label="option.label"
               :value="option.value" v-model="selectedOption" class="pa-1"/>
@@ -41,16 +41,16 @@
               <p class="text-left">Capture Proof</p>
             </div>
             <!-- Open Camera Button -->
-            <div v-if="cameraoperation" class="rounded bg-green-darken-4 d-flex justify-center align-center px-3"
-              style="width: 100%;">
-              <v-btn @click="openCamera" block class="bg-green-darken-4 text-white"
-                prepend-icon="mdi mdi-camera-flip-outline" text="Open Camera / Upload Files" variant="flat">
+            <div v-if="cameraoperation" class="rounded w-75 bg-green-darken-4 d-flex justify-center align-center px-3"
+              >
+              <v-btn @click="openCamera" block class="bg-green-darken-4 text-white py-10"
+                prepend-icon="mdi mdi-camera-flip-outline" text="Open Camera/Upload Files" variant="flat">
               </v-btn>
             </div>
 
             <!-- Camera Container -->
             <div v-if="cameracontainer" class="w-75 rounded d-flex justify-center align-center flex-column">
-              <video ref="videoElement" autoplay class="w-100 h-100"></video>
+              <video ref="videoElement" autoplay class="w-75 h-75"></video>
               <div class="w-100 d-flex ga-2 justify-center">
                 <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="flipCamera" class="mt-2 bg-green-darken-4"
                   text="Flip" variant="flat"></v-btn>
@@ -59,8 +59,8 @@
               </div>
             </div>
             <!-- Display Captured Image -->
-            <div v-if="capturedImage" class="w-75">
-              <img :src="capturedImage" alt="Captured Photo" class="w-100 rounded shadow-lg" />
+            <div v-if="capturedImage" class="w-75 d-flex flex-column justify-center align-center">
+              <img :src="capturedImage" alt="Captured Photo" class="w-75 h-75 rounded shadow-lg" />
               <div class="w-100 d-flex ga-2 justify-center">
                 <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="dialog = true" class="mt-2 bg-indigo-darken-4"
                   text="Expand" variant="flat"></v-btn>
