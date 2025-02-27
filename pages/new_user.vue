@@ -79,7 +79,7 @@
 
         </div>
         <div class=" d-flex gap-2" :style="{ height: box3Height + 'px' }">
-          <div class="w-100 d-flex justify-center align-end">
+          <div class="w-100 d-flex justify-center align-end ga-2">
             <v-btn @click="reset()" class="bg-yellow text-black" block>Reset</v-btn>
           </div>
           <div class="w-100 d-flex justify-center align-end">
