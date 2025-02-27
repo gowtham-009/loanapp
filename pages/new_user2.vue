@@ -36,15 +36,17 @@
                 <i class="mdi mdi-camera-flip-outline"></i> Open Camera/Upload Files
               </p>
           </div>
-          <!-- Camera Container -->
-          <div v-if="cameracontainer" class="w-100 rounded d-flex justify-center align-center flex-column">
-            <video ref="videoElement" autoplay :style="{ height: cmaheight + 'px' }" class="w-100"></video>            <div class="w-100 d-flex ga-2 justify-center">
-              <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="flipCamera" class="mt-2 bg-green-darken-4"
-                text="Flip" variant="flat"></v-btn>
-              <v-btn prepend-icon="mdi mdi-camera-enhance" @click="captureImage" class="mt-2 bg-gray-darken-4"
-                text="Capture" variant="flat"></v-btn>
+          
+            <!-- Camera Container -->
+            <div v-if="cameracontainer" class="w-100 rounded d-flex justify-center align-center flex-column" >
+              <video ref="videoElement" autoplay :style="{ height: cmaheight + 'px' }" class="w-100" style="object-fit: cover; border-radius: 5px;"></video>
+              <div class="w-100 d-flex ga-2 justify-center">
+                <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="flipCamera" class="mt-2 bg-green-darken-4"
+                  text="Flip" variant="flat"></v-btn>
+                <v-btn prepend-icon="mdi mdi-camera-enhance" @click="captureImage" class="mt-2 bg-gray-darken-4"
+                  text="Capture" variant="flat"></v-btn>
+              </div>
             </div>
-          </div>
           <!-- Display Captured Image -->
           <div v-if="capturedImage" class="w-100">
             <img :src="capturedImage" alt="Captured Photo" :style="{ height: cmaheight + 'px' }" class="w-100 rounded shadow-lg" />
@@ -55,7 +57,7 @@
                 text="Re-Capture" variant="flat"></v-btn>
             </div>
           </div>
-          <canvas ref="canvasElement" style="display: none;"></canvas>
+          <canvas ref="canvasElement" class="w-100" style="display: none;"></canvas>
         </div>
 
         <div class="w-100 pa-2" v-if="showphoto">
