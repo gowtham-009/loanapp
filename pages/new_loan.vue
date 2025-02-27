@@ -62,7 +62,7 @@
         <p class="text-left">Capture Proof</p>
       </div>
       <!-- Open Camera Button -->
-      <div v-if="cameraoperation" class="w-75 rounded bg-green-darken-4 d-flex justify-center align-center"
+      <div v-if="cameraoperation" :style="{ height: cmaheight + 'px' }" class="w-75 rounded bg-green-darken-4 d-flex justify-center align-center"
         style="height: 200px;">
         <v-btn @click="openCamera" block class="bg-green-darken-4" prepend-icon="mdi mdi-camera-flip-outline"
           text="Open Camera / Upload Files" variant="flat"></v-btn>
