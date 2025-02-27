@@ -57,7 +57,7 @@
         class="w-100"  />
     </div>
 
-    <div class="w-100 pa-1 mt-1 d-flex justify-center align-center flex-column">
+    <div class="w-100 pa-1 d-flex justify-center align-center flex-column">
       <div class="w-100 d-flex justify-start">
         <p class="text-left">Capture Proof</p>
       </div>
@@ -200,7 +200,7 @@ const updateSizes = () => {
   box1Height.value = deviceHeight.value * 0.05 // 8% height
   box2Height.value = deviceHeight.value * 0.05 // 92% height
   box3Height.value = deviceHeight.value * 0.90 // 92% height
-  cmaheight.value = box3Height.value * 0.3 // 92% height
+  cmaheight.value = box3Height.value * 0.2 // 92% height
 
 
 }
