@@ -899,7 +899,11 @@ setdata()
         delete_interest_id,
         edit_record,
   
-        isAuthenticated
+        isAuthenticated,
+        getFormattedDateTime,
+        currentdate,
+        setdata,
+        settinginsertdata
      
       };
     },
