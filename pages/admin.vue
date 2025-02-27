@@ -901,7 +901,7 @@ setdata()
   
         isAuthenticated,
         getFormattedDateTime,
-        currentdate,
+        currentDateTime,
         setdata,
         settinginsertdata
      
