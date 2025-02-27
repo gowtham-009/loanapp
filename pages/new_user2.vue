@@ -30,15 +30,15 @@
             <p class="text-left"> NProof</p>
           </div>
           <!-- Open Camera Button -->
-          <div v-if="cameraoperation" :style="{ height: cmaheight + 'px' }" class="w-75 rounded bg-green-darken-4 d-flex justify-center align-center"
-            style="height: 200px;">
+          <div v-if="cameraoperation" :style="{ height: cmaheight + 'px' }" class="w-100 rounded bg-green-darken-4 d-flex justify-center align-center"
+            >
             <p class="text-center" @click="openCamera">
                 <i class="mdi mdi-camera-flip-outline"></i> Open Camera/Upload Files
               </p>
           </div>
           <!-- Camera Container -->
-          <div v-if="cameracontainer" class="w-75 rounded d-flex justify-center align-center flex-column">
-            <video ref="videoElement" autoplay :style="{ height: cmaheight + 'px' }" class="w-75"></video>
+          <div v-if="cameracontainer" class="w-100 rounded d-flex justify-center align-center flex-column">
+            <video ref="videoElement" autoplay :style="{ height: cmaheight + 'px' }" class="w-100"></video>
             <div class="w-100 d-flex ga-2 justify-center">
               <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="flipCamera" class="mt-2 bg-green-darken-4"
                 text="Flip" variant="flat"></v-btn>
@@ -47,8 +47,8 @@
             </div>
           </div>
           <!-- Display Captured Image -->
-          <div v-if="capturedImage" class="w-75">
-            <img :src="capturedImage" alt="Captured Photo" :style="{ height: cmaheight + 'px' }" class="w-75 rounded shadow-lg" />
+          <div v-if="capturedImage" class="w-100">
+            <img :src="capturedImage" alt="Captured Photo" :style="{ height: cmaheight + 'px' }" class="w-100 rounded shadow-lg" />
             <div class="w-100 d-flex ga-2 justify-center">
               <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="dialog = true" class="mt-2 bg-indigo-darken-4"
                 text="Expand" variant="flat"></v-btn>
@@ -59,8 +59,8 @@
           <canvas ref="canvasElement" style="display: none;"></canvas>
         </div>
 
-        <div class="w-full pa-2" v-if="showphoto">
-          <img :src="capturedImage" alt="Captured Photo" class="w-100 rounded shadow-lg" />
+        <div class="w-100 pa-2" v-if="showphoto">
+          <img :src="capturedImage" :style="{ height: cmaheight + 'px' }" alt="Captured Photo" class="w-100 rounded shadow-lg" />
           <v-btn block @click="retake()" class="bg-red text-white">Re Take</v-btn>
         </div>
       </div>
@@ -154,7 +154,7 @@ const updateSizes = () => {
   box1Height.value = deviceHeight.value * 0.05 // 8% height
   box2Height.value = deviceHeight.value * 0.90 // 92% height
   box3Height.value = deviceHeight.value * 0.05
-  cmaheight.value=box2Height.value * 0.2
+  cmaheight.value=box2Height.value * 0.3
 
 }
 
