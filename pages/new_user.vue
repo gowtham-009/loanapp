@@ -50,8 +50,8 @@
             </div>
 
             <!-- Camera Container -->
-            <div v-if="cameracontainer" class="w-75 rounded d-flex justify-center align-center flex-column">
-              <video ref="videoElement" autoplay :style="{ height: cmaheight + 'px' }" class="w-75"></video>
+            <div v-if="cameracontainer" class=" rounded d-flex justify-center align-center flex-column">
+              <video ref="videoElement" autoplay :style="{ height: cmaheight + 'px' }" style="width: 90%;"></video>
               <div class="w-100 d-flex ga-2 justify-center">
                 <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="flipCamera" class="mt-2 bg-green-darken-4"
                   text="Flip" variant="flat"></v-btn>
@@ -60,9 +60,9 @@
               </div>
             </div>
             <!-- Display Captured Image -->
-            <div v-if="capturedImage" class="w-75 d-flex flex-column justify-center align-center">
-              <img :src="capturedImage" alt="Captured Photo" :style="{ height: cmaheight + 'px' }"
-                class=" w-75 rounded shadow-lg" />
+            <div v-if="capturedImage" class=" d-flex flex-column justify-center align-center">
+              <img :src="capturedImage" alt="Captured Photo" :style="{ height: cmaheight + 'px' }" style="width: 90%;"
+                class="  rounded shadow-lg" />
               <div class="w-100 d-flex ga-2 justify-center">
                 <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="dialog = true" class="mt-2 bg-indigo-darken-4"
                   text="Expand" variant="flat"></v-btn>
@@ -73,7 +73,7 @@
             <canvas ref="canvasElement" style="display: none;"></canvas>
           </div>
           <div class="w-full pa-2" v-if="showphoto">
-            <img :src="capturedImage" alt="Captured Photo" class="w-100 rounded shadow-lg" />
+            <img :src="capturedImage" alt="Captured Photo" :style="{ height: cmaheight + 'px' }" style="width: 90%;" class=" rounded shadow-lg" />
             <v-btn block @click="retake()" class="bg-red text-white">Re Take</v-btn>
           </div>
 
@@ -173,7 +173,7 @@ const updateSizes = () => {
   box1Height.value = deviceHeight.value * 0.05 // 8% height
   box2Height.value = deviceHeight.value * 0.90 // 92% height
   box3Height.value = deviceHeight.value * 0.05
-  cmaheight.value = box2Height.value * 0.3
+  cmaheight.value = box2Height.value * 0.5
 
 }
 
