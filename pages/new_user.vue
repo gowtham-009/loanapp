@@ -50,7 +50,7 @@
             </div>
 
             <!-- Camera Container -->
-            <div v-if="cameracontainer" class=" rounded d-flex justify-center align-center flex-column">
+            <div v-if="cameracontainer" class=" rounded d-flex justify-center align-center flex-column" >
               <video ref="videoElement" autoplay :style="{ height: cmaheight + 'px' }" class="w-100"></video>
               <div class="w-100 d-flex ga-2 justify-center">
                 <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="flipCamera" class="mt-2 bg-green-darken-4"
@@ -60,7 +60,7 @@
               </div>
             </div>
             <!-- Display Captured Image -->
-            <div v-if="capturedImage" class=" d-flex flex-column justify-center align-center">
+            <div v-if="capturedImage" class=" d-flex flex-column justify-center align-center" >
               <img :src="capturedImage" alt="Captured Photo" :style="{ height: cmaheight + 'px' }" 
                 class="w-100  rounded shadow-lg" />
               <div class="w-100 d-flex ga-2 justify-center">
