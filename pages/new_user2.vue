@@ -30,16 +30,15 @@
             <p class="text-left"> NProof</p>
           </div>
           <!-- Open Camera Button -->
-          <div v-if="cameraoperation" :style="{ height: cmaheight + 'px' }" class="w-100 rounded bg-green-darken-4 d-flex justify-center align-center"
-            >
+          <div v-if="cameraoperation" :style="{ height: cmaheight + 'px' }"
+           class="w-100 rounded bg-green-darken-4 d-flex justify-center align-center">
             <p class="text-center" @click="openCamera">
                 <i class="mdi mdi-camera-flip-outline"></i> Open Camera/Upload Files
               </p>
           </div>
           <!-- Camera Container -->
           <div v-if="cameracontainer" class="w-100 rounded d-flex justify-center align-center flex-column">
-            <video ref="videoElement" autoplay :style="{ height: cmaheight + 'px' }" class="w-100"></video>
-            <div class="w-100 d-flex ga-2 justify-center">
+            <video ref="videoElement" autoplay :style="{ height: cmaheight + 'px' }" class="w-100"></video>            <div class="w-100 d-flex ga-2 justify-center">
               <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="flipCamera" class="mt-2 bg-green-darken-4"
                 text="Flip" variant="flat"></v-btn>
               <v-btn prepend-icon="mdi mdi-camera-enhance" @click="captureImage" class="mt-2 bg-gray-darken-4"
