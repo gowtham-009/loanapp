@@ -126,9 +126,12 @@
               </div>
 
             </div>
-            <div class="w-100 d-flex ga-3 pa-4 align-center">
+            <div v-if="insertbtn" class="w-100 d-flex ga-3 pa-4 align-center">
               <div class="w-100"><v-btn class="bg-yellow text-black" block>Reset</v-btn></div>
               <div class="w-100"><v-btn class="bg-green text-white" type="submit" block>Insert</v-btn></div>
+            </div>
+            <div v-if="updatebtn" class="w-100 d-flex ga-3 pa-4 align-center">
+              <div class="w-100"><v-btn class="bg-indigo text-white" block>Update</v-btn></div>
             </div>
           </v-form>
         </v-tabs-window-item>
@@ -256,6 +259,7 @@ onBeforeUnmount(() => {
 })
 
 // tab-1 section
+
 const options = ref([
   { label: 'ALL', value: 'all' },
   { label: 'Brass', value: 'brass' },
@@ -332,11 +336,54 @@ const categoriesfilter_data = async () => {
   }
 };
 
+const addselectedOption = ref('');
+const lower_l = ref('')
+const upper_l = ref('')
+const discount_interest = ref('')
+const discount = ref('')
+const el_interest = ref('')
 
-const edit_record=(rocored_id)=>{
+const insertbtn=ref(true)
+const updatebtn=ref(false)
+const edit_record= async(rocored_id)=>{
+  if(rocored_id){
+    insertbtn.value=false
+    updatebtn.value=true
+    const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/interest_update.php';
+    const formdata = new FormData();
+    formdata.append('interestid', rocored_id);
+
+    try {
+      const response = await fetch(apiurl, {
+          method: 'POST',
+          body: formdata,
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to submit filter data.');
+        } else {
+          const data = await response.json();
+         
+          addselectedOption.value = data[0]?.Loan_type1 || ''; 
+          lower_l.value = data[0]?.LowLimit || '';
+          upper_l.value = data[0]?.UpperLimit || ''; 
+          discount.value = data[0]?.DiscountPeriod || ''; 
+          discount_interest.value = data[0]?.DiscountInterest || ''; 
+          el_interest.value = data[0]?.ElevatedInterest || '';
+        }
+    } catch (error) {
+      errorpopup.value=true
+      errormessage.value=error.message
+    }
+    finally{
+      tab.value='add'
+    }
+  }
 
 
 }
+
+
 // tab-2 section
 const addoptions = ref([
   { label: 'Gold', value: 'Gold' },
@@ -344,12 +391,7 @@ const addoptions = ref([
   { label: 'Brass', value: 'Brass' },
 ]);
 
-const addselectedOption = ref('');
-const lower_l = ref('')
-const upper_l = ref('')
-const discount_interest = ref('')
-const discount = ref('')
-const el_interest = ref('')
+
 
 const restrictDecimalPlaces_l = () => {
   let value = lower_l.value.replace(/[^0-9.]/g, ''); // Remove non-numeric characters except '.'
