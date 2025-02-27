@@ -30,14 +30,15 @@
             <p class="text-left"> NProof</p>
           </div>
           <!-- Open Camera Button -->
-          <div v-if="cameraoperation" class="w-75 rounded bg-green-darken-4 d-flex justify-center align-center"
+          <div v-if="cameraoperation" :style="{ height: cmaheight + 'px' }" class="w-75 rounded bg-green-darken-4 d-flex justify-center align-center"
             style="height: 200px;">
-            <v-btn @click="openCamera" block class="bg-green-darken-4" prepend-icon="mdi mdi-camera-flip-outline"
-              text="Open Camera / Upload Files" variant="flat"></v-btn>
+            <p class="text-center" @click="openCamera">
+                <i class="mdi mdi-camera-flip-outline"></i> Open Camera/Upload Files
+              </p>
           </div>
           <!-- Camera Container -->
           <div v-if="cameracontainer" class="w-75 rounded d-flex justify-center align-center flex-column">
-            <video ref="videoElement" autoplay class="w-100 h-100"></video>
+            <video ref="videoElement" autoplay :style="{ height: cmaheight + 'px' }" class="w-75"></video>
             <div class="w-100 d-flex ga-2 justify-center">
               <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="flipCamera" class="mt-2 bg-green-darken-4"
                 text="Flip" variant="flat"></v-btn>
@@ -47,7 +48,7 @@
           </div>
           <!-- Display Captured Image -->
           <div v-if="capturedImage" class="w-75">
-            <img :src="capturedImage" alt="Captured Photo" class="w-100 rounded shadow-lg" />
+            <img :src="capturedImage" alt="Captured Photo" :style="{ height: cmaheight + 'px' }" class="w-75 rounded shadow-lg" />
             <div class="w-100 d-flex ga-2 justify-center">
               <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="dialog = true" class="mt-2 bg-indigo-darken-4"
                 text="Expand" variant="flat"></v-btn>
@@ -146,12 +147,14 @@ const deviceHeight = ref(0)
 const box1Height = ref(0)
 const box2Height = ref(0)
 const box3Height = ref(0)
+const cmaheight=ref(0)
 
 const updateSizes = () => {
   deviceHeight.value = window.innerHeight
   box1Height.value = deviceHeight.value * 0.05 // 8% height
   box2Height.value = deviceHeight.value * 0.90 // 92% height
   box3Height.value = deviceHeight.value * 0.05
+  cmaheight.value=box2Height.value * 0.2
 
 }
 

@@ -28,10 +28,10 @@
           <div class="options " style=" margin-top: -8px;">
             <p class="text-left">Select ID Proof</p>
             <CheckboxButton v-for="option in options" :key="option.value" :name="'proof-type'" :label="option.label"
-              :value="option.value" v-model="selectedOption" class="pa-1"/>
+              :value="option.value" v-model="selectedOption" class="pa-1" />
           </div>
 
-          <v-text-field variant="solo-filled"  v-model="proofid" :counter="16" :rules="proofRules"
+          <v-text-field variant="solo-filled" v-model="proofid" :counter="16" :rules="proofRules"
             label="Proof ID / Number" placeholder="Enter Unique ID Number" hide-details class="w-100 mt-2"
             @input="proofid = proofid.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 16)"></v-text-field>
 
@@ -41,11 +41,12 @@
               <p class="text-left">Capture Proof</p>
             </div>
             <!-- Open Camera Button -->
-            <div v-if="cameraoperation" :style="{ height: cmaheight + 'px' }" class="rounded w-75 bg-green-darken-4 d-flex justify-center align-center px-3"
-              >
-              <v-btn @click="openCamera" block class="bg-green-darken-4 text-white"
-                prepend-icon="mdi mdi-camera-flip-outline" text="Open Camera/Upload Files" variant="flat">
-              </v-btn>
+            <div v-if="cameraoperation" :style="{ height: cmaheight + 'px' }"
+              class="rounded w-75 bg-green-darken-4 d-flex justify-center align-center px-3">
+              <p class="text-center" @click="openCamera">
+                <i class="mdi mdi-camera-flip-outline"></i> Open Camera/Upload Files
+              </p>
+
             </div>
 
             <!-- Camera Container -->
@@ -60,7 +61,8 @@
             </div>
             <!-- Display Captured Image -->
             <div v-if="capturedImage" class="w-75 d-flex flex-column justify-center align-center">
-              <img :src="capturedImage" alt="Captured Photo" :style="{ height: cmaheight + 'px' }" class=" w-75 rounded shadow-lg" />
+              <img :src="capturedImage" alt="Captured Photo" :style="{ height: cmaheight + 'px' }"
+                class=" w-75 rounded shadow-lg" />
               <div class="w-100 d-flex ga-2 justify-center">
                 <v-btn prepend-icon="mdi mdi-camera-flip-outline" @click="dialog = true" class="mt-2 bg-indigo-darken-4"
                   text="Expand" variant="flat"></v-btn>
@@ -125,7 +127,7 @@ const deviceHeight = ref(0)
 const box1Height = ref(0)
 const box2Height = ref(0)
 const box3Height = ref(0)
-const cmaheight=ref(0)
+const cmaheight = ref(0)
 const phoneNumber = ref("");
 const proofid = ref("");
 const proofRules = [
@@ -140,7 +142,7 @@ const validateInput = () => {
 };
 
 const validateLength = () => {
-  return phoneNumber.value.length === 10 ;
+  return phoneNumber.value.length === 10;
 };
 
 const getFormattedDateTime = () => {
@@ -171,7 +173,7 @@ const updateSizes = () => {
   box1Height.value = deviceHeight.value * 0.05 // 8% height
   box2Height.value = deviceHeight.value * 0.90 // 92% height
   box3Height.value = deviceHeight.value * 0.05
-  cmaheight.value=box2Height.value * 0.2
+  cmaheight.value = box2Height.value * 0.2
 
 }
 
