@@ -7,11 +7,11 @@
     </div>
 
     <div v-if="successpopup" style="position: absolute; width: 100%; z-index: 10;">
-      <v-alert title="Success"  type="success">
+      <v-alert title="Success" type="success">
         {{ successmesage }}
       </v-alert>
     </div>
-    <div class="pa-2" :style="{ height: box1Height + 'px' }" style="border: 1px solid red;">
+    <div class="pa-2" :style="{ height: box1Height + 'px' }" >
       <v-tabs v-model="tab" align-tabs="center">
         <v-tab value="saved">Saved</v-tab>
         <v-tab value="add">Add</v-tab>
@@ -20,29 +20,56 @@
 
       <v-tabs-window v-model="tab">
         <v-tabs-window-item value="saved">
-
-          <div class="w-100 pa-1">
-            <label for="" class="text-indigo font-weight-bold">Loan Type</label>
-            <div class="options d-flex justify-center">
-              <CheckboxButton v-for="option in options" :key="option.value" :name="'check-type1'" :label="option.label"
-                :value="option.value" v-model="selectedOption" class="pa-2" />
-            </div>
-          </div>
-
-          <div class="w-100 pa-1 d-flex ga-2">
+          <v-form @submit.prevent="categoriesfilter_data">
             <div class="w-100 pa-1">
-              <label for="">Select Low Limit</label>
-              <v-select v-model="selectedLowerLimit" label="Select Low Limit" :items="lowerlimit" variant="solo-filled"
-                :rules="[value => !value || value.length > 0 || 'Low limit is optional']" />
+              <label for="" class="text-indigo font-weight-bold">Loan Type</label>
+              <div class="options d-flex justify-center">
+                <CheckboxButton v-for="option in options" :key="option.value" :name="'check-type1'"
+                  :label="option.label" :value="option.value" v-model="selectedOption" class="pa-2" />
+              </div>
             </div>
-            <div class="w-100 pa-1">
-              <label for="">Select Upper Limit</label>
-              <v-select v-model="selectedUpperLimit" label="Select Upper Limit" variant="solo-filled"
-                :items="upperlimit" :rules="[value => !value || value.length > 0 || 'Upper limit is optional']" />
-            </div>
-          </div>
 
-          <v-btn class="text-white bg-indigo" type="submit" block>Search</v-btn>
+            <div class="w-100 pa-1 d-flex ga-2">
+              <div class="w-100 pa-1">
+                <label for="">Select Low Limit</label>
+                <v-select v-model="selectedLowerLimit" label="Select Low Limit" :items="lowerlimit"
+                  variant="solo-filled" :rules="[value => !value || value.length > 0 || 'Low limit is optional']" />
+              </div>
+              <div class="w-100 pa-1">
+                <label for="">Select Upper Limit</label>
+                <v-select v-model="selectedUpperLimit" label="Select Upper Limit" variant="solo-filled"
+                  :items="upperlimit" :rules="[value => !value || value.length > 0 || 'Upper limit is optional']" />
+              </div>
+            </div>
+
+            <v-btn class="text-white bg-indigo" type="submit" block>Search</v-btn>
+
+          </v-form>
+
+          <div class="d-flex justify-center h-screen d-flex justify-center align-center" v-if="loadingtab1">
+            <v-progress-circular color="purple" indeterminate></v-progress-circular>
+          </div>
+         <div class="d-flex flex-column ga-3 mt-1">
+          <div v-for="data in resval" class="pt-1 pa-1 bg-blue" :key="data.id">
+            <v-sheet class="w-100 pa-1 d-flex flex-column">
+              <div class="w-100 d-flex justify-content-between" style="display: flex; justify-content: space-between;">
+                <div class="text-indigo">ID: {{ data.id }}</div>
+                <div class="text-indigo">{{ data.Loan_type1 }}</div>
+              </div>
+              <div>LowLimit: {{ data.LowLimit }}</div>
+              <div>UpperLimit: {{ data.UpperLimit }}</div>
+              <div>DiscountPeriod: {{ data.DiscountPeriod }}</div>
+              <div>DiscountInterest: {{ data.DiscountInterest }}</div>
+              <div>ElevatedInterest: {{ data.ElevatedInterest }}</div>
+              <div class="w-100 pa-2 d-flex justify-space-between ga-2">
+                <div class="w-100"><v-btn class="bg-red text-white" @click="edit_record(data.id)" block>Edit</v-btn>
+                </div>
+                <div class="w-100"><v-btn class="bg-blue text-white" @click="openDeleteDialog(data.id)"
+                    block>Delete</v-btn></div>
+              </div>
+            </v-sheet>
+          </div>
+         </div>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="add">
@@ -189,11 +216,13 @@
 import { ref, onBeforeMount } from 'vue';
 import CheckboxButton from '~/components/CheckboxButton.vue'; // Adjust the path as necessary
 import { useRouter } from 'vue-router'
+import { errorMessages } from 'vue/compiler-sfc';
 const isAuthenticated = ref(false)
+const loadingtab1=ref(false)
 const errorpopup = ref(false)
 const errormessage = ref(null)
-const successmesage=ref(null)
-const successpopup=ref(false)
+const successmesage = ref(null)
+const successpopup = ref(false)
 onBeforeMount(() => {
   const token = localStorage.getItem('token')
 
@@ -242,6 +271,7 @@ const selectedUpperLimit = ref(null);
 const getlimitsvalue = async () => {
 
 
+
   const apiurl_search = 'http://vaanam.w3webtechnologies.co.in/loandb/limitsvalue.php';
 
   try {
@@ -264,7 +294,43 @@ const getlimitsvalue = async () => {
 
 // Call the search function on component mount
 getlimitsvalue();
+const resval=ref([])
 
+const categoriesfilter_data = async () => {
+  loadingtab1.value = true;
+  errormessage.value = null
+
+  const formdatafilter = new FormData();
+  formdatafilter.append('loan_type', selectedOption.value);
+
+  if (selectedLowerLimit.value) {
+    formdatafilter.append('lower_limit', selectedLowerLimit.value);
+  }
+
+  if (selectedUpperLimit.value) {
+    formdatafilter.append('upper_limit', selectedUpperLimit.value);
+  }
+
+  const apiurlf = 'http://vaanam.w3webtechnologies.co.in/loandb/filter.php';
+  try {
+    const responsef = await fetch(apiurlf, {
+      method: 'POST',
+      body: formdatafilter,
+    });
+
+    if (!responsef.ok) {
+      throw new Error('Failed to submit filter data.');
+    }
+
+    const datafilter = await responsef.json();
+    resval.value = datafilter; // Assign filtered data to res
+  } catch (err) {
+    errorpopup.value=true
+    errormessage.value=err.message
+  } finally {
+    loadingtab1.value = false;
+  }
+};
 
 // tab-2 section
 const addoptions = ref([
@@ -432,24 +498,24 @@ const data_insert = async () => {
   } finally {
     loading.value = false
     intrestform.value = true
-    successpopup.value=true
-    successmesage.value='Successfully Inserted'
+    successpopup.value = true
+    successmesage.value = 'Successfully Inserted'
 
     setTimeout(() => {
-      successpopup.value=false
+      successpopup.value = false
     }, 1000);
   }
 };
 
 
 // tab-3 section
-const onetimeform=ref(true)
+const onetimeform = ref(true)
 const isDisabled = ref(true);
-const otselectedOption=ref('')
-const month=ref('')
-const ysselectedOption=ref('')
-const calselectedOption=ref('')
-const govtrate=ref('')
+const otselectedOption = ref('')
+const month = ref('')
+const ysselectedOption = ref('')
+const calselectedOption = ref('')
+const govtrate = ref('')
 
 const toggleDisabled = () => {
   isDisabled.value = !isDisabled.value;
@@ -480,177 +546,179 @@ const blockInvalidChar = (event) => {
 };
 
 
-const setdata = async()=>{
+const setdata = async () => {
 
-      const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/setting_get.php';
-      try {
-        const response= await fetch(apiurl, {
-          method: 'GET',
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch data. Please check your inputs.');
-        }
-        const getdata = await response.json();
-        otselectedOption.value=getdata[0].ExtraDays
-         month.value=getdata[0].AdvanceMonths
-         ysselectedOption.value=getdata[0].HandOver
-         calselectedOption.value=getdata[0].CalculationMethod
-         govtrate.value=getdata[0].GovtRate
+  const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/setting_get.php';
+  try {
+    const response = await fetch(apiurl, {
+      method: 'GET',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch data. Please check your inputs.');
+    }
+    const getdata = await response.json();
+    otselectedOption.value = getdata[0].ExtraDays
+    month.value = getdata[0].AdvanceMonths
+    ysselectedOption.value = getdata[0].HandOver
+    calselectedOption.value = getdata[0].CalculationMethod
+    govtrate.value = getdata[0].GovtRate
 
-      } catch (err) {
-        errorpopup.value=true
-        errormessage.value=err.message
-      } 
+  } catch (err) {
+    errorpopup.value = true
+    errormessage.value = err.message
+  }
 }
 setdata()
 
 const handleSubmit3 = async (typemode) => {
-  if(typemode==='update'){
+  if (typemode === 'update') {
     if (!otselectedOption.value) {
-    errorpopup.value = true
-    errormessage.value = 'Fild[1] is Required'
+      errorpopup.value = true
+      errormessage.value = 'Fild[1] is Required'
+    }
+    else if (!month.value) {
+      errorpopup.value = true
+      errormessage.value = 'Fild[2] is Required'
+    }
+    else if (!ysselectedOption.value) {
+      errorpopup.value = true
+      errormessage.value = 'Fild[3] value is Required'
+    }
+    else if (!calselectedOption.value) {
+      errorpopup.value = true
+      errormessage.value = 'Fild[4] value is Required'
+    }
+    else if (!govtrate.value) {
+      errorpopup.value = true
+      errormessage.value = 'Fild[5] value is Required'
+    }
+    else {
+      errorpopup.value = false
+      errormessage.value = ''
+      updatedata()
+    }
   }
-  else if (!month.value) {
-    errorpopup.value = true
-    errormessage.value = 'Fild[2] is Required'
-  }
-  else if (!ysselectedOption.value) {
-    errorpopup.value = true
-    errormessage.value = 'Fild[3] value is Required'
-  }
-  else if (!calselectedOption.value) {
-    errorpopup.value = true
-    errormessage.value = 'Fild[4] value is Required'
-  }
-  else if (!govtrate.value) {
-    errorpopup.value = true
-    errormessage.value = 'Fild[5] value is Required'
-  }
-  else{
-     errorpopup.value = false
-    errormessage.value = ''
-    updatedata()
-  }
-  }
-  if(typemode==='insert'){
+  if (typemode === 'insert') {
     if (!otselectedOption.value) {
-    errorpopup.value = true
-    errormessage.value = 'Fild[1] is Required'
-  }
-  else if (!month.value) {
-    errorpopup.value = true
-    errormessage.value = 'Fild[2] is Required'
-  }
-  else if (!ysselectedOption.value) {
-    errorpopup.value = true
-    errormessage.value = 'Fild[3] value is Required'
-  }
-  else if (!calselectedOption.value) {
-    errorpopup.value = true
-    errormessage.value = 'Fild[4] value is Required'
-  }
-  else if (!govtrate.value) {
-    errorpopup.value = true
-    errormessage.value = 'Fild[5] value is Required'
-  }
-  else{
-     errorpopup.value = false
-    errormessage.value = ''
-    settinginsertdata()
-  }
+      errorpopup.value = true
+      errormessage.value = 'Fild[1] is Required'
+    }
+    else if (!month.value) {
+      errorpopup.value = true
+      errormessage.value = 'Fild[2] is Required'
+    }
+    else if (!ysselectedOption.value) {
+      errorpopup.value = true
+      errormessage.value = 'Fild[3] value is Required'
+    }
+    else if (!calselectedOption.value) {
+      errorpopup.value = true
+      errormessage.value = 'Fild[4] value is Required'
+    }
+    else if (!govtrate.value) {
+      errorpopup.value = true
+      errormessage.value = 'Fild[5] value is Required'
+    }
+    else {
+      errorpopup.value = false
+      errormessage.value = ''
+      settinginsertdata()
+    }
   }
 }
 
 
 
-const updatedata = async()=>{
-    loading.value=true
-    onetimeform.value=false
-    const apiurl_u = 'http://vaanam.w3webtechnologies.co.in/loandb/setting.php';
-    const formdata = new FormData();
-    formdata.append('datetime', currentDateTime.value);
-        formdata.append('ExtraDays', otselectedOption.value);
-        formdata.append('AdvanceMonths', month.value);
-        formdata.append('HandOver', ysselectedOption.value);
-        formdata.append('CalculationMethod', calselectedOption.value);
-        formdata.append('GovtRate', govtrate.value);
-  
-        try {
-          const response = await fetch(apiurl_u, {
-            method: 'POST',
-            body: formdata,
-          });
-  
-          if (!response.ok) {
-            throw new Error('Failed to submit data. Please check your inputs.');
-          }
-  
-          const data = await response.json();
-         
-  
-        } catch (err) {
-          errorpopup.value=true
-          errormessage.value=err.message
-        } finally {
-          loading.value=false
-          onetimeform.value=true
-          successpopup.value=true
-          successmesage.value='Successfully Updated'
+const updatedata = async () => {
+  loading.value = true
+  onetimeform.value = false
+  const apiurl_u = 'http://vaanam.w3webtechnologies.co.in/loandb/setting.php';
+  const formdata = new FormData();
+  formdata.append('datetime', currentDateTime.value);
+  formdata.append('ExtraDays', otselectedOption.value);
+  formdata.append('AdvanceMonths', month.value);
+  formdata.append('HandOver', ysselectedOption.value);
+  formdata.append('CalculationMethod', calselectedOption.value);
+  formdata.append('GovtRate', govtrate.value);
 
-          setTimeout(() => {
-            successpopup.value=false
-          }, 1000);
-          isDisabled.value=true
-        }
-  
-  }
+  try {
+    const response = await fetch(apiurl_u, {
+      method: 'POST',
+      body: formdata,
+    });
 
-  const settinginsertdata = async()=>{
-    loading.value=true
-    onetimeform.value=false
-    const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/settinginsert.php';
-    const formdata = new FormData();
-    formdata.append('datetime', currentDateTime.value);
-        formdata.append('ExtraDays', otselectedOption.value);
-        formdata.append('AdvanceMonths', month.value);
-        formdata.append('HandOver', ysselectedOption.value);
-        formdata.append('CalculationMethod', calselectedOption.value);
-        formdata.append('GovtRate', govtrate.value);
-  
-        try {
-          const response = await fetch(apiurl, {
-            method: 'POST',
-            body: formdata,
-          });
-  
-          if (!response.ok) {
-            throw new Error('Failed to submit data. Please check your inputs.');
-          }
-  
-          const data = await response.json();
-          data.value=data
-  
-        } catch (err) {
-          errorpopup.value=true
-          errormessage.value=err.message
-        } finally {
-          loading.value=false
-          onetimeform.value=true
-          successpopup.value=true
-    successmesage.value='Successfully Inserted'
+    if (!response.ok) {
+      throw new Error('Failed to submit data. Please check your inputs.');
+    }
+
+    const data = await response.json();
+
+
+  } catch (err) {
+    errorpopup.value = true
+    errormessage.value = err.message
+  } finally {
+    loading.value = false
+    onetimeform.value = true
+    successpopup.value = true
+    successmesage.value = 'Successfully Updated'
 
     setTimeout(() => {
-      successpopup.value=false
+      successpopup.value = false
     }, 1000);
-        }
-        isDisabled.value=true
+    isDisabled.value = true
   }
+
+}
+
+const settinginsertdata = async () => {
+  loading.value = true
+  onetimeform.value = false
+  const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/settinginsert.php';
+  const formdata = new FormData();
+  formdata.append('datetime', currentDateTime.value);
+  formdata.append('ExtraDays', otselectedOption.value);
+  formdata.append('AdvanceMonths', month.value);
+  formdata.append('HandOver', ysselectedOption.value);
+  formdata.append('CalculationMethod', calselectedOption.value);
+  formdata.append('GovtRate', govtrate.value);
+
+  try {
+    const response = await fetch(apiurl, {
+      method: 'POST',
+      body: formdata,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to submit data. Please check your inputs.');
+    }
+
+    const data = await response.json();
+    data.value = data
+
+  } catch (err) {
+    errorpopup.value = true
+    errormessage.value = err.message
+  } finally {
+    loading.value = false
+    onetimeform.value = true
+    successpopup.value = true
+    successmesage.value = 'Successfully Inserted'
+
+    setTimeout(() => {
+      successpopup.value = false
+    }, 1000);
+  }
+  isDisabled.value = true
+}
 
 </script>
 
 <style>
-  .disabled-box {
-    pointer-events: none; /* Disable pointer events */
-    opacity: 0.5; /* Optional: make it look visually disabled */
-  }
+.disabled-box {
+  pointer-events: none;
+  /* Disable pointer events */
+  opacity: 0.5;
+  /* Optional: make it look visually disabled */
+}
 </style>
