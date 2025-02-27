@@ -272,7 +272,7 @@ const getlimitsvalue = async () => {
 
 
 
-  const apiurl_search = 'http://vaanam.w3webtechnologies.co.in/loandb/limitsvalue.php';
+  const apiurl_search = 'https://vaanam.w3webtechnologies.co.in/loandb/limitsvalue.php';
 
   try {
     const response_search = await fetch(apiurl_search, {
@@ -311,7 +311,7 @@ const categoriesfilter_data = async () => {
     formdatafilter.append('upper_limit', selectedUpperLimit.value);
   }
 
-  const apiurlf = 'http://vaanam.w3webtechnologies.co.in/loandb/filter.php';
+  const apiurlf = 'https://vaanam.w3webtechnologies.co.in/loandb/filter.php';
   try {
     const responsef = await fetch(apiurlf, {
       method: 'POST',
@@ -334,7 +334,7 @@ const categoriesfilter_data = async () => {
 
 
 const edit_record=(rocored_id)=>{
-  
+
 
 }
 // tab-2 section
@@ -474,7 +474,7 @@ const data_insert = async () => {
 
   loading.value = true
   intrestform.value = false
-  const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/interest.php';
+  const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/interest.php';
   const formData = new FormData();
   formData.append('datetime', currentDateTime.value);
   formData.append('Loan_type1', addselectedOption.value);
@@ -553,7 +553,7 @@ const blockInvalidChar = (event) => {
 
 const setdata = async () => {
 
-  const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/setting_get.php';
+  const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/setting_get.php';
   try {
     const response = await fetch(apiurl, {
       method: 'GET',
@@ -637,7 +637,7 @@ const handleSubmit3 = async (typemode) => {
 const updatedata = async () => {
   loading.value = true
   onetimeform.value = false
-  const apiurl_u = 'http://vaanam.w3webtechnologies.co.in/loandb/setting.php';
+  const apiurl_u = 'https://vaanam.w3webtechnologies.co.in/loandb/setting.php';
   const formdata = new FormData();
   formdata.append('datetime', currentDateTime.value);
   formdata.append('ExtraDays', otselectedOption.value);
@@ -679,7 +679,7 @@ const updatedata = async () => {
 const settinginsertdata = async () => {
   loading.value = true
   onetimeform.value = false
-  const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/settinginsert.php';
+  const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/settinginsert.php';
   const formdata = new FormData();
   formdata.append('datetime', currentDateTime.value);
   formdata.append('ExtraDays', otselectedOption.value);
