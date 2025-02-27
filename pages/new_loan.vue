@@ -200,7 +200,7 @@ const updateSizes = () => {
   box1Height.value = deviceHeight.value * 0.05 // 8% height
   box2Height.value = deviceHeight.value * 0.05 // 92% height
   box3Height.value = deviceHeight.value * 0.90 // 92% height
-  cmaheight.value = box3Height.value * 0.2 // 92% height
+  cmaheight.value = box3Height.value * 0.3 // 92% height
 
 
 }
