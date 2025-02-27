@@ -395,13 +395,6 @@ const previous_total_balance=async()=>{
 }
 previous_total_balance()
 </script>
-
-  
-  <style scoped>
-  /* Add any necessary styles here */
-  </style>
-  
-  
   <style >
    html, body {
     overflow-y: hidden;
