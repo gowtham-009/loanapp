@@ -9,7 +9,7 @@
     />
     <div class="btn-label d-flex ga-2">
       <div 
-        style="border: 2px solid white; border-radius: 100%; width: 20px; height: 20px; display: flex; justify-content: center; align-items: center;"
+        style="border: 2px solid white; border-radius: 100%; width: 18px; height: 18px; display: flex; justify-content: center; align-items: center;"
       >
         <i class="fas fa-check" style="font-size: 12px; margin-left: 7px;"></i>
       </div>
@@ -80,7 +80,7 @@ export default {
   justify-content: center;
   align-items: center; /* Align icon and text */
   background-color: #ccc;
-  padding: 10px 20px;
+  padding: 5px 15px;
   color: white;
   border-radius: 20px;
   font-size: 12px;
