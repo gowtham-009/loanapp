@@ -76,7 +76,7 @@
           <p class="text-black">Place: {{ globaldata.Place }}</p>
         </div>
         <div class="w-100 d-flex ga-1">
-          <div class="w-100"><v-btn class="bg-yellow" @click="editdata(globaldata.App_id)" block>Edit</v-btn></div>
+          <div class="w-100"><v-btn class="bg-yellow" @click="editdata(globaldata.Loan_appid)" block>Edit</v-btn></div>
           <div class="w-100"><v-btn class="bg-indigo" @click="selectloandata(globaldata.App_id)" block>Select</v-btn></div>
         </div>
       </v-card>
@@ -246,6 +246,12 @@ const userdata=async()=>{
     datashow.value=true
     }
 
+  }
+  const router=useRouter()
+  const secretKey = "appidsecreatekey001";
+  const editdata=(loanid)=>{
+    const encryptedValue = CryptoJS.AES.encrypt(loanid, secretKey).toString();
+    router.push({ path: '/new_loan', query: { data: encodeURIComponent(encryptedValue),  enable: 'true' } });
   }
 
 </script>

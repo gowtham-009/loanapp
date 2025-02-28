@@ -18,7 +18,7 @@
   <v-btn class="bg-yellow" block @click="handleButtonClick">{{ buttonLabel }}</v-btn>
 </div>
 
-<v-form  @submit.prevent="handleEvent" :disabled="formDisabled" :class="{ 'disabled-box': formDisabled }" :style="{ height: form + 'px', backgroundColor: formColor }"
+<v-form  @submit.prevent :disabled="formDisabled" :class="{ 'disabled-box': formDisabled }" :style="{ height: form + 'px', backgroundColor: formColor }"
   class="w-100">
   <div class="d-flex flex-column justify-space-between" :style="{ height: box3Height + 'px' }">
     <div>
@@ -57,7 +57,7 @@
         class="w-100"  />
     </div>
 
-    <div class="w-100 pa-1 d-flex justify-center align-center flex-column">
+    <div class="w-100 pa-1 d-flex justify-center align-center flex-column" v-if="cmabox">
       <div class="w-100 d-flex justify-start">
         <p class="text-left">Capture Proof</p>
       </div>
@@ -88,7 +88,12 @@
         </div>
       </div>
       <canvas ref="canvasElement" style="display: none;"></canvas>
-    </div>   
+    </div> 
+    
+    <div class="w-100 pa-2" v-if="showphoto">
+          <img :src="capturedImage" :style="{ height: cmaheight + 'px' }" alt="Captured Photo" class="w-100 rounded shadow-lg" />
+          <v-btn block @click="retake()" class="bg-red text-white">Re Take</v-btn>
+        </div>
     </div>
     <!-- <span>vnaeorn{{ appid }}</span> -->
     <div class="d-flex ga-2">
@@ -96,7 +101,10 @@
         <v-btn @click="reset()" class="bg-yellow text-black" block>Reset</v-btn>
       </div>
       <div class="w-100 d-flex justify-center align-end">
-        <v-btn  block type="submit" class="bg-green text-white">
+        <v-btn  block type="submit" @click="handleEvent('update')"  class="bg-blue text-white">
+          Update
+        </v-btn>
+        <v-btn  block type="submit" @click="handleEvent('insert')"  class="bg-green text-white">
           Next
         </v-btn>
       </div>
@@ -127,8 +135,8 @@ const box1Height = ref(0)
 const box2Height = ref(0)
 const box3Height = ref(0)
 const cmaheight = ref(0)
-
-
+const cmabox=ref(true)
+const showphoto=ref(false)
 const loanform=ref(true)
 const loading=ref(false)
 
@@ -341,6 +349,39 @@ const formatweight = () => {
 
   weight.value = value;
 };
+
+
+const getloannumber=async()=>{
+  
+  const apiurl_loan='https://vaanam.w3webtechnologies.co.in/loandb/getloan_number.php'
+ 
+  
+
+  try {
+    const response=await fetch(apiurl_loan,{
+      method:"GET",
+     
+    })
+    if(!response.ok){
+      throw new Error('Failed your response try again!');
+      }
+      else{
+       
+        const data=await response.json()
+         const loan_no=Number(data[0].Loan_Number )+1
+        
+         
+       sfa.value=loan_no
+
+    
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+    
+    
+}
+
 const secretKey = "appidsecreatekey001";
 const decryptedValue = ref('');
 
@@ -350,6 +391,8 @@ onMounted(() => {
   
       formDisabled.value = false;
       buttonLabel.value = "Clear";
+
+      showphoto.value=false
   
     }
 
@@ -357,12 +400,21 @@ onMounted(() => {
   if (encryptedData) {
     const bytes = CryptoJS.AES.decrypt(decodeURIComponent(encryptedData), secretKey);
     decryptedValue.value = bytes.toString(CryptoJS.enc.Utf8);
-    
+   
+    const Loan_appid=decryptedValue.value
+    if(Loan_appid.includes('L')){
+        getloandata( decryptedValue.value)
+    }
+   
+   
   }
 });
 
-const handleEvent=()=>{
-if(!currentdate){
+const handleEvent=(sendmode)=>{
+  if(sendmode=='insert'){
+    
+
+    if(!currentdate){
   errorpopup.value=true
   errormessage.value='Date is Required'
 }
@@ -371,6 +423,7 @@ else if(!selectedOption.value){
     errormessage.value='Select Loan Type'
   }
   else if(!loanvalue.value){
+   
     errorpopup.value=true
     errormessage.value='Loan value is Required'
   }
@@ -391,41 +444,61 @@ else if(!selectedOption.value){
     errormessage.value='Photo is Required'
   }
 
+ else{
   errorpopup.value=false
     errormessage.value=''
 
   postdata_loan()
-}
+ }
+  }
 
-
-
-const getloannumber=async()=>{
-  
-     const apiurl_loan='https://vaanam.w3webtechnologies.co.in/loandb/getloan_number.php'
+  if(sendmode=='update'){
     
-     
- 
-     try {
-       const response=await fetch(apiurl_loan,{
-         method:"GET",
-        
-       })
-       if(!response.ok){
-         throw new Error('Failed your response try again!');
-         }
-         else{
-          
-           const data=await response.json()
-            const loan_no=Number(data[0].Loan_Number )+1
-            
-          sfa.value=loan_no
-         }
-       } catch (error) {
-         console.log(error.message)
-       }
-       
-       
-   }
+
+    if(!currentdate){
+  errorpopup.value=true
+  errormessage.value='Date is Required'
+}
+else if(!selectedOption.value){
+    errorpopup.value=true
+    errormessage.value='Select Loan Type'
+  }
+  else if(!loanvalue.value){
+   
+    errorpopup.value=true
+    errormessage.value='Loan value is Required'
+  }
+  else if(!handover.value){
+    errorpopup.value=true
+    errormessage.value='Handover value is Required'
+  }
+  else if(!weight.value){
+    errorpopup.value=true
+    errormessage.value='Weight value is Required'
+  }
+  else if(!powndetails.value){
+    errorpopup.value=true
+    errormessage.value='Pown details is Required'
+  }
+  else if(!capturedImage.value){
+    errorpopup.value=true
+    errormessage.value='Photo is Required'
+  }
+
+ else{
+  errorpopup.value=false
+    errormessage.value=''
+
+    update_data()
+ }
+  }
+
+  }
+
+
+
+
+
  
    if(isAuthenticated.value==false){
     
@@ -472,10 +545,11 @@ const getloannumber=async()=>{
          else{
           
            const data_loan=await response_loan.json()
-           loanid.value=data_loan.loan_id
+          
          }
        } catch (error) {
-         error.value=error.message
+        errorpopup.value = false
+        errormessage.value = error.message
        }
        finally{
         loading.value=false
@@ -495,6 +569,98 @@ const getloannumber=async()=>{
     capturedImage.value=false
     
    }
+
+   const getloandata=async(loanval)=>{
+
+   
+     if(loanval){
+      cmabox.value=false
+      cameracontainer.value=false
+      showphoto.value=true
+     }
+
+    errormessage.value=null
+    const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/loan_getdata.php';
+    const formdata_loan = new FormData();
+    formdata_loan.append('loanid', decryptedValue.value);
+
+    try {
+    const response = await fetch(apiurl, {
+      method: "POST",
+      body: formdata_loan,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed your response try again!');
+    } else {
+      const data_loan = await response.json();
+      sfa.value = data_loan[0].Loan_Number;
+      currentdate.value = data_loan[0].Loan_Date;
+      selectedOption.value = data_loan[0].Loan_Type;
+      loanvalue.value = data_loan[0].Loan_Value;
+      handover.value = data_loan[0].Loan_Handover;
+      weight.value = data_loan[0].Weight;
+      powndetails.value = data_loan[0].Pawn_Details;
+      capturedImage.value=data_loan[0].nPorul
+    
+    }
+  } catch (error) {
+    errorpopup.value = false
+    errormessage.value = error.message
+  } finally {
+   
+  }
+
+   }
+
+  
+
+   const retake=()=>{
+    capturedImage.value=''
+    showphoto.value=false
+    cmabox.value=true
+   }
+  
+
+   const update_data=async()=>{
+    loading.value = true;
+    loanform.value=false
+
+    const formdata = new FormData();
+    const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/loan_edit_data.php';
+    formdata.append('datetime', currentDateTime.value);
+    formdata.append('loanid', decryptedValue.value);
+    formdata.append('loannumber', sfa.value);
+    formdata.append('loandate', currentdate.value);
+    formdata.append('loantype', selectedOption.value);
+    formdata.append('loanvalue', loanvalue.value);
+    formdata.append('loanhandover', handover.value);
+    formdata.append('weight', weight.value);
+    formdata.append('pawndetails', powndetails.value);
+    formdata.append('nporul', capturedImage.value);
+
+    
+    
+    try {
+        const response = await fetch(apiurl, {
+            method: "POST",
+            body: formdata
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update data, please try again.');
+        } else {
+            const data = await response.json();
+            // Handle the response data as needed
+        }
+    } catch (error) {
+      errorpopup.value = false
+      errormessage.value = error.message
+    } finally {
+      loading.value = false;
+      loanform.value=true
+    }
+  }
 </script>
 
 <style>
