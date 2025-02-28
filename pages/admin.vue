@@ -11,15 +11,16 @@
         {{ successmesage }}
       </v-alert>
     </div>
-    <div class="pa-2" :style="{ height: box1Height + 'px' }" >
-      <v-tabs v-model="tab" align-tabs="center">
+    <!-- :style="{ height: box1Height + 'px' }" -->
+    <div class="pa-2 h-screen" style="border: 1px solid red;" >
+      <v-tabs v-model="tab" align-tabs="center"> 
         <v-tab value="saved">Saved</v-tab>
         <v-tab value="add">Add</v-tab>
         <v-tab value="onetime">One Time</v-tab>
       </v-tabs>
 
       <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="saved">
+        <v-tabs-window-item value="saved" class="pa-2 d-flex flex-column" >
           <v-form @submit.prevent="categoriesfilter_data">
             <div class="w-100 pa-1">
               <label for="" class="text-indigo font-weight-bold">Loan Type</label>
@@ -49,9 +50,10 @@
           <div class="d-flex justify-center h-screen d-flex justify-center align-center" v-if="loadingtab1">
             <v-progress-circular color="purple" indeterminate></v-progress-circular>
           </div>
-          <div class="d-flex flex-column ga-2 mt-1 cont" >
+          <div class="d-flex flex-column ga-2 mt-1 pa-1 "  style="border: 1px solid red; overflow: hidden; overflow-y: scroll; height: 65vh;" >
+           
             <p class="text-center">{{ nodata }}</p>
-  <div v-for="data in resval" :key="data.id" class="pt-1 pa-1">
+  <div v-for="data in resval" :key="data.id" class="pt-1 pa-1" >
     <div class="w-100 pa-1 d-flex flex-column  rounded bg-blue-grey-lighten-5">
       <div class="w-100 d-flex justify-space-between">
         <div class="text-indigo">ID: {{ data.id }}</div>
@@ -241,7 +243,7 @@
         </div>
      
       </v-card>
-    </v-dialog>
+    </v-dialog> 
 
     </div>
   </div>
