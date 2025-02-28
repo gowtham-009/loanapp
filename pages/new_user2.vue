@@ -5,7 +5,7 @@
   </div>
     <form @submit.prevent="handleSubmit" v-if="userform">
       <div v-if="errorpopup" style="position: absolute; width: 100%; z-index: 10;">
-        <v-alert title="Input fields are Required !" type="error">
+        <v-alert  type="error">
           {{ errormessage }}
         </v-alert>
 

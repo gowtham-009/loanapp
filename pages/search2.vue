@@ -1,7 +1,7 @@
 <template>
   <div v-if="isAuthenticated">
     <div v-if="errorpopup" style="position: absolute; width: 100%; z-index: 10;">
-          <v-alert title="Input fields are Required !" type="error">
+          <v-alert  type="error">
             {{ errormessage }}
           </v-alert>
          
@@ -144,7 +144,7 @@ const validateInput = () => {
 };
 
 const validateLength = () => {
-  return phoneNumber.value.length === 10 || "Number must be exactly 10 digits";
+  return phoneNumber.value.length === 10 ;
 };
 
 const allowOnlyAlphabets = (event) => {
