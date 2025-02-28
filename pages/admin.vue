@@ -127,7 +127,7 @@
                 <input class="d-none" type="text" v-model="idval">
             </div>
             <div v-if="insertbtn" class="w-100 d-flex ga-3 pa-4 align-center">
-              <div class="w-100"><v-btn class="bg-yellow text-black" block>Reset</v-btn></div>
+              <div class="w-100"><v-btn class="bg-yellow text-black" @click="resetform()" block>Reset</v-btn></div>
               <div class="w-100"><v-btn class="bg-green text-white" @click="handleSubmit('insert')" type="submit" block>Insert</v-btn></div>
             </div>
             <div v-if="updatebtn" class="w-100 d-flex ga-3 pa-4 align-center">
@@ -641,6 +641,14 @@ const update_form = async()=>{
     }
 
 
+    const resetform=()=>{
+      addselectedOption.value=''
+      lower_l.value=''
+      upper_l.value=''
+      discount.value=''
+      discount_interest.value=''
+      el_interest.value=''
+    }
 
 
 // tab-3 section
