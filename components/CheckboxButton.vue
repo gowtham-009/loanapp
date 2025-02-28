@@ -104,4 +104,18 @@ export default {
 .radio-btn .btn-label:hover {
   background-color: #888; /* Add hover effect */
 }
+
+@media(max-width:400px){
+  .radio-btn .btn-label {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Align icon and text */
+  background-color: #ccc;
+  padding: 5px 8px;
+  color: white;
+  border-radius: 20px;
+  font-size: 12px;
+  transition: background-color 0.3s;
+}
+}
 </style>
