@@ -205,6 +205,48 @@ const userdata=async()=>{
 
   userdata()
 
+  const filterdata=async(filtervalue)=>{
+    loading.value=true
+    datashow.value=false
+    const apiurl='http://vaanam.w3webtechnologies.co.in/loandb/loan_search_data.php'
+    const formdata=new FormData()
+    if(filtervalue=='mobile'){
+      formdata.append('mobilenumber', phoneNumber.value)
+      formdata.append('place', '')
+    }
+    else if(filtervalue=='nameplace'){
+      formdata.append('name', name.value)
+      formdata.append('place', place.value)
+    }
+    else if(filtervalue=='proof'){
+      formdata.append('proofid', proofid.value)
+      formdata.append('prooftype', selectedOption.value)
+    }
+    try {
+      const response=await fetch(apiurl,{
+          method:"POST",
+          body:formdata
+        })
+
+        if(!response.ok){
+          throw new Error('Failed your response try again!');
+          }
+          else{
+            const data=await response.json()
+            datauser.value=data
+           
+          }
+
+    } catch (error) {
+      errorpopup.value=true
+      errormessage.value = error.message
+    }
+    finally{
+      loading.value=false
+    datashow.value=true
+    }
+
+  }
 
 </script>
 
