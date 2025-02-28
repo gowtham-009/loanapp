@@ -60,6 +60,7 @@
       <v-progress-circular color="purple" indeterminate></v-progress-circular>
   </div>
   <div class="w-100 d-flex flex-column ga-2" v-if="datashow">
+    <p class="text-center">{{ nodata }}</p>
     <div v-for="globaldata in userdata" :key="globaldata.id">
       <v-card class="bg-grey-lighten-5 pa-2" variant="tonal">
         <div class="w-100 d-flex justify-space-between pa-2">
@@ -206,7 +207,7 @@ errormessage.value=null
     datashow.value=true
   }
 }
-
+const nodata=ref('')
 const filterdata=async(filtermode)=>{
 
   loading.value=true
@@ -238,9 +239,11 @@ errormessage.value=null
           const data=await response.json()
           if(data.length>0){
             userdata.value=data
+           nodata.value=' '
           }
           else{
-            userdata.value='No data Found'
+            userdata.value=''
+            nodata.value='No data Found'
           }
          
         }

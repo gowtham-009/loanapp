@@ -808,11 +808,12 @@ setdata()
         dialog_delete.value = true
       }
       const error_del=ref(null)
+      
       const delete_interest_id = async()=>{
         error_del.value=null
         const deleteform=new FormData();
         deleteform.append('interestid',selectedId.value)
-        const deleteapi='http://vaanam.w3webtechnologies.co.in/loandb/interest_delete.php'
+        const deleteapi='https://vaanam.w3webtechnologies.co.in/loandb/interest_delete.php'
   
         try{
           const del_res= await fetch(deleteapi,{

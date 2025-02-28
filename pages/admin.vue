@@ -49,10 +49,11 @@
           <div class="d-flex justify-center h-screen d-flex justify-center align-center" v-if="loadingtab1">
             <v-progress-circular color="purple" indeterminate></v-progress-circular>
           </div>
-          <div class="d-flex flex-column mt-1 cont" >
-  <div v-for="data in resval" :key="data.id" class="pt-1 pa-1 bg-blue">
-    <v-sheet class="w-100 pa-1 d-flex flex-column">
-      <div class="w-100 d-flex justify-content-between">
+          <div class="d-flex flex-column ga-2 mt-1 cont" >
+            <p class="text-center">{{ nodata }}</p>
+  <div v-for="data in resval" :key="data.id" class="pt-1 pa-1">
+    <div class="w-100 pa-1 d-flex flex-column  rounded bg-blue-grey-lighten-5">
+      <div class="w-100 d-flex justify-space-between">
         <div class="text-indigo">ID: {{ data.id }}</div>
         <div class="text-indigo">{{ data.Loan_type1 }}</div>
       </div>
@@ -69,7 +70,7 @@
           <v-btn class="bg-blue text-white" @click="openDeleteDialog(data.id)" block>Delete</v-btn>
         </div>
       </div>
-    </v-sheet>
+    </div>
   </div>
 </div>
 
@@ -214,6 +215,34 @@
 
         </v-tabs-window-item>
       </v-tabs-window>
+
+
+      <v-dialog
+      v-model="dialog"
+      width="auto"
+    >
+      <v-card
+        max-width="400"
+        prepend-icon="mdi-update"
+        title="Are you sure delete this row?"
+      >
+       
+        <div class="w-100 d-flex justify-end ga-2 pa-2">
+          <v-btn
+            class=" bg-red text-white"
+            text="Delete"
+           @click="delete_interest_id()"
+          ></v-btn>
+          <v-btn
+           
+            text="Close"
+            @click="dialog = false"
+          ></v-btn>
+        </div>
+     
+      </v-card>
+    </v-dialog>
+
     </div>
   </div>
 </template>
@@ -275,6 +304,14 @@ const upperlimit = ref([]);
 const selectedLowerLimit = ref(null);
 const selectedUpperLimit = ref(null);
 
+const dialog=ref(false)
+const selectedId = ref(null)
+
+const openDeleteDialog =(id)=>{
+        selectedId.value = id
+        dialog.value = true
+      }
+
 const getlimitsvalue = async () => {
 
 
@@ -302,7 +339,7 @@ const getlimitsvalue = async () => {
 // Call the search function on component mount
 getlimitsvalue();
 const resval=ref([])
-
+const nodata=ref('')
 const categoriesfilter_data = async () => {
   loadingtab1.value = true;
   errormessage.value = null
@@ -330,7 +367,14 @@ const categoriesfilter_data = async () => {
     }
 
     const datafilter = await responsef.json();
-    resval.value = datafilter; // Assign filtered data to res
+    if(datafilter.length>0){
+      resval.value = datafilter; 
+      nodata.value=''
+    }
+    else{
+      nodata.value='Data is Empty'
+    }
+  
   } catch (err) {
     errorpopup.value=true
     errormessage.value=err.message
@@ -338,6 +382,38 @@ const categoriesfilter_data = async () => {
     loadingtab1.value = false;
   }
 };
+
+
+
+const delete_interest_id = async()=>{
+       
+        const formdata=new FormData();
+        formdata.append('interestid',selectedId.value)
+        const apiurl='https://vaanam.w3webtechnologies.co.in/loandb/interest_delete.php'
+  
+        try{
+          const response= await fetch(apiurl,{
+            method:'POST',
+            body:formdata
+          })
+          if(!response.ok){
+            throw new Error('Failed to submit filter data.');
+          }
+          else{
+            const data=response.json()
+          }
+        
+        }
+        catch(err){
+          errorpopup.value=true
+          errormessage.value=error.message
+          }
+          finally{
+            dialog.value = false 
+            categoriesfilter_data()
+          }
+      }
+  
 
 const addselectedOption = ref('');
 const lower_l = ref('')
@@ -367,6 +443,7 @@ const edit_record= async(rocored_id)=>{
           throw new Error('Failed to submit filter data.');
         } else {
           const data = await response.json();
+          
          
           addselectedOption.value = data[0]?.Loan_type1 || ''; 
           lower_l.value = data[0]?.LowLimit || '';
