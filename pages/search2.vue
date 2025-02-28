@@ -55,7 +55,7 @@
 </div>
 
 
-<div class="w-100 pa-2" style=" height: 510px; overflow-y: auto;">
+<div class="w-100 pa-2 cont" >
   <div class="d-flex justify-center" v-if="loading">
       <v-progress-circular color="purple" indeterminate></v-progress-circular>
   </div>
@@ -272,4 +272,13 @@ const selectloandata=(appid)=>{
 }
 </script>
 
-<style></style>
+<style>
+
+.cont {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 300px; /* Set a reasonable minimum height */
+  max-height: calc(100vh - 150px); /* Adjust based on header/footer heights */
+}
+
+</style>
