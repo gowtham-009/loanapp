@@ -149,7 +149,7 @@ const getFormattedDateTime = () => {
   const date = new Date();
   const formattedDate = date.toISOString().split('T')[0]; // dd-mm-yyyy
   const formattedTime = date.toLocaleTimeString('en-GB', { hour12: false }); // hh:mm:ss
-  return `${formattedDate}${formattedTime}`;
+  return `${formattedDate} ${formattedTime}`;
 };
 
 const currentDateTime = ref(getFormattedDateTime());
