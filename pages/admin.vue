@@ -349,7 +349,7 @@ const edit_record= async(rocored_id)=>{
   if(rocored_id){
     insertbtn.value=false
     updatebtn.value=true
-    const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/interest_update.php';
+    const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/interest_update.php';
     const formdata = new FormData();
     formdata.append('interestid', rocored_id);
 
