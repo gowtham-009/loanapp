@@ -11,8 +11,8 @@
         {{ successmesage }}
       </v-alert>
     </div>
-    <!-- :style="{ height: box1Height + 'px' }" -->
-    <div class="pa-2 h-screen" style="border: 1px solid red;" >
+    <!--  -->
+    <div class="pa-2 " :style="{ height: box1Height + 'px' }"  >
       <v-tabs v-model="tab" align-tabs="center"> 
         <v-tab value="saved">Saved</v-tab>
         <v-tab value="add">Add</v-tab>
@@ -20,7 +20,7 @@
       </v-tabs>
 
       <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="saved" class="pa-2 d-flex flex-column" >
+        <v-tabs-window-item value="saved" class="pa-2 " >
           <v-form @submit.prevent="categoriesfilter_data">
             <div class="w-100 pa-1">
               <label for="" class="text-indigo font-weight-bold">Loan Type</label>
@@ -50,7 +50,7 @@
           <div class="d-flex justify-center h-screen d-flex justify-center align-center" v-if="loadingtab1">
             <v-progress-circular color="purple" indeterminate></v-progress-circular>
           </div>
-          <div class="d-flex flex-column ga-2 mt-1 pa-1 "  style="border: 1px solid red; overflow: hidden; overflow-y: scroll; height: 65vh;" >
+          <div class="d-flex flex-column ga-2 mt-1 cont" >
            
             <p class="text-center">{{ nodata }}</p>
   <div v-for="data in resval" :key="data.id" class="pt-1 pa-1" >
