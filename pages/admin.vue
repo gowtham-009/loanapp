@@ -49,7 +49,7 @@
           <div class="d-flex justify-center h-screen d-flex justify-center align-center" v-if="loadingtab1">
             <v-progress-circular color="purple" indeterminate></v-progress-circular>
           </div>
-          <div class="d-flex flex-column mt-1" style="min-height: 600px; max-height: 600px; overflow-y: auto; gap: 12px;">
+          <div class="d-flex flex-column mt-1 cont" >
   <div v-for="data in resval" :key="data.id" class="pt-1 pa-1 bg-blue">
     <v-sheet class="w-100 pa-1 d-flex flex-column">
       <div class="w-100 d-flex justify-content-between">
@@ -867,4 +867,12 @@ const settinginsertdata = async () => {
   opacity: 0.5;
   /* Optional: make it look visually disabled */
 }
+
+.cont {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 300px; /* Set a reasonable minimum height */
+  max-height: calc(100vh - 150px); /* Adjust based on header/footer heights */
+}
+
 </style>
