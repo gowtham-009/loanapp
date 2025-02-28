@@ -177,7 +177,7 @@ const datauser=ref([])
 const userdata=async()=>{
       loading.value=true
       datashow.value=false
-      const apiurl='http://vaanam.w3webtechnologies.co.in/loandb/getlastdata_loan.php'
+      const apiurl='https://vaanam.w3webtechnologies.co.in/loandb/getlastdata_loan.php'
       
       
       try {
@@ -208,7 +208,7 @@ const userdata=async()=>{
   const filterdata=async(filtervalue)=>{
     loading.value=true
     datashow.value=false
-    const apiurl='http://vaanam.w3webtechnologies.co.in/loandb/loan_search_data.php'
+    const apiurl='https://vaanam.w3webtechnologies.co.in/loandb/loan_search_data.php'
     const formdata=new FormData()
     if(filtervalue=='mobile'){
       formdata.append('mobilenumber', phoneNumber.value)
