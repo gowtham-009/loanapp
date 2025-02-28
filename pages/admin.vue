@@ -49,7 +49,8 @@
           <div class="d-flex justify-center h-screen d-flex justify-center align-center" v-if="loadingtab1">
             <v-progress-circular color="purple" indeterminate></v-progress-circular>
           </div>
-         <div class="d-flex flex-column ga-3 mt-1">
+         <div class="d-flex flex-column ga-3 mt-1" style=" height: 600px; overflow-y: scroll;">
+
           <div v-for="data in resval" class="pt-1 pa-1 bg-blue" :key="data.id">
             <v-sheet class="w-100 pa-1 d-flex flex-column">
               <div class="w-100 d-flex justify-content-between" style="display: flex; justify-content: space-between;">
