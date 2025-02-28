@@ -1,7 +1,7 @@
 <template>
   <div v-if="isAuthenticated">
     <div v-if="errorpopup" style="position: absolute; width: 100%; z-index: 10;">
-      <v-alert title="Input fields are Required !" type="error">
+      <v-alert type="error">
         {{ errormessage }}
       </v-alert>
     </div>
@@ -77,7 +77,7 @@
           <div class="d-flex justify-center h-screen d-flex justify-center align-center" v-if="loading">
             <v-progress-circular color="purple" indeterminate></v-progress-circular>
           </div>
-          <v-form v-if="intrestform" @submit.prevent="handleSubmit">
+          <v-form v-if="intrestform" @submit.prevent>
             <div class="w-100 d-flex justify-center flex-wrap">
               <CheckboxButton v-for="option in addoptions" :key="option.value" :name="'check-type2'"
                 :label="option.label" :value="option.value" v-model="addselectedOption" class="pa-2" />
@@ -124,14 +124,14 @@
                 <v-text-field variant="solo-filled" v-model="el_interest" type="number" hide-details required
                   class="w-100" :rules="elrules" @input="restrictDecimalPlaces_el"></v-text-field>
               </div>
-
+                <input class="d-none" type="text" v-model="idval">
             </div>
             <div v-if="insertbtn" class="w-100 d-flex ga-3 pa-4 align-center">
               <div class="w-100"><v-btn class="bg-yellow text-black" block>Reset</v-btn></div>
-              <div class="w-100"><v-btn class="bg-green text-white" type="submit" block>Insert</v-btn></div>
+              <div class="w-100"><v-btn class="bg-green text-white" @click="handleSubmit('insert')" type="submit" block>Insert</v-btn></div>
             </div>
             <div v-if="updatebtn" class="w-100 d-flex ga-3 pa-4 align-center">
-              <div class="w-100"><v-btn class="bg-indigo text-white" block>Update</v-btn></div>
+              <div class="w-100"><v-btn class="bg-indigo text-white" @click="handleSubmit('update')" type="submit" block>Update</v-btn></div>
             </div>
           </v-form>
         </v-tabs-window-item>
@@ -342,9 +342,10 @@ const upper_l = ref('')
 const discount_interest = ref('')
 const discount = ref('')
 const el_interest = ref('')
-
+const idval=ref('')
 const insertbtn=ref(true)
 const updatebtn=ref(false)
+
 const edit_record= async(rocored_id)=>{
   if(rocored_id){
     insertbtn.value=false
@@ -370,6 +371,7 @@ const edit_record= async(rocored_id)=>{
           discount.value = data[0]?.DiscountPeriod || ''; 
           discount_interest.value = data[0]?.DiscountInterest || ''; 
           el_interest.value = data[0]?.ElevatedInterest || '';
+          idval.value=rocored_id
         }
     } catch (error) {
       errorpopup.value=true
@@ -468,8 +470,9 @@ const restrictDecimalPlaces_el = () => {
 };
 
 
-const handleSubmit = async () => {
-
+const handleSubmit = async (datamode) => {
+  if(datamode=='insert'){
+      
   if (!addselectedOption.value) {
     errorpopup.value = true
     errormessage.value = 'loan type is Required'
@@ -499,7 +502,47 @@ const handleSubmit = async () => {
     errormessage.value = ''
     data_insert();
   }
+  }
+
+
+  if(datamode=='update'){
+    
+  if (!addselectedOption.value) {
+    errorpopup.value = true
+    errormessage.value = 'loan type is Required'
+  }
+  else if (!lower_l.value) {
+    errorpopup.value = true
+    errormessage.value = 'lower value is Required'
+  }
+  else if (!upper_l.value) {
+    errorpopup.value = true
+    errormessage.value = 'upper value is Required'
+  }
+  else if (!discount.value) {
+    errorpopup.value = true
+    errormessage.value = 'dicount value is Required'
+  }
+  else if (!discount_interest.value) {
+    errorpopup.value = true
+    errormessage.value = 'discount intrest value is Required'
+  }
+  else if (!el_interest.value) {
+    errorpopup.value = true
+    errormessage.value = 'elevated intrest value is Required'
+  }
+  else {
+    errorpopup.value = false
+    errormessage.value = ''
+    update_form();
+  }
+  }
+
+
+
 };
+
+
 
 const loading = ref(false)
 const intrestform = ref(true)
@@ -553,6 +596,51 @@ const data_insert = async () => {
     }, 1000);
   }
 };
+
+
+const update_form = async()=>{
+        loading.value=true
+        intrestform.value=false
+        const formdata=new FormData()
+        formdata.append('datetime', currentDateTime.value);
+        formdata.append('interestid', idval.value)
+        formdata.append('Loan_type1', addselectedOption.value)
+        formdata.append('LowLimit', lower_l.value)
+        formdata.append('UpperLimit', upper_l.value)
+        formdata.append('DiscountPeriod', discount.value)
+        formdata.append('DiscountInterest',discount_interest.value)
+        formdata.append('ElevatedInterest', el_interest.value)
+        const apiurl='https://vaanam.w3webtechnologies.co.in/loandb/update_insert.php'
+        try{
+            const response=await fetch(apiurl,{
+              method:'POST',
+              body:formdata
+            })
+            if(!response.ok){
+              throw new Error('Failed to submit filter data.');
+            }
+            else{
+              const data=await response.json()
+
+            }
+        }
+        catch(err){
+          errorpopup.value=true
+          errormessage.value=err.message
+        }
+        finally{
+          loading.value=false
+          intrestform.value=true
+          successpopup.value = true
+          successmesage.value = 'Successfully Updated'
+
+    setTimeout(() => {
+      successpopup.value = false
+    }, 1000);
+        }
+    }
+
+
 
 
 // tab-3 section
