@@ -258,8 +258,9 @@ const isAuthenticated = ref(false)
 const loadingtab1=ref(false)
 const errorpopup = ref(false)
 const errormessage = ref(null)
-const successmesage = ref(null)
+
 const successpopup = ref(false)
+const successmesage = ref('')
 onBeforeMount(() => {
   const token = localStorage.getItem('token')
 

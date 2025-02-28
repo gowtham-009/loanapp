@@ -5,12 +5,11 @@
         {{ errormessage }}
       </v-alert>
     </div>
-    <div class="w-100 bg-indigo d-flex justify-center" :style="{ height: box1Height + 'px' }"
-      style="border: 1px solid red;">
+    <div class="w-100 bg-indigo d-flex justify-center" :style="{ height: box1Height + 'px' }">
       <logo />
     </div>
 
-    <div class="w-100" :style="{ height: box2Height + 'px' }" style="border: 2px solid yellow;">
+    <div class="w-100" :style="{ height: box2Height + 'px' }" >
       <v-tabs v-model="tab" align-tabs="center">
         <v-tab value="mobile">Mobile Number</v-tab>
         <v-tab value="name">Name</v-tab>
