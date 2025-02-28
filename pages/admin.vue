@@ -25,7 +25,7 @@
               <label for="" class="text-indigo font-weight-bold">Loan Type</label>
               <div class="options d-flex justify-center">
                 <CheckboxButton v-for="option in options" :key="option.value" :name="'check-type1'"
-                  :label="option.label" :value="option.value" v-model="selectedOption" class="pa-2" />
+                  :label="option.label" :value="option.value" v-model="selectedOption" class="pa-1" />
               </div>
             </div>
 
