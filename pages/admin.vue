@@ -49,28 +49,30 @@
           <div class="d-flex justify-center h-screen d-flex justify-center align-center" v-if="loadingtab1">
             <v-progress-circular color="purple" indeterminate></v-progress-circular>
           </div>
-         <div class="d-flex flex-column ga-3 mt-1" style=" height: 600px; overflow-y: scroll;">
+          <div class="d-flex flex-column mt-1" style="min-height: 600px; max-height: 600px; overflow-y: auto; gap: 12px;">
+  <div v-for="data in resval" :key="data.id" class="pt-1 pa-1 bg-blue">
+    <v-sheet class="w-100 pa-1 d-flex flex-column">
+      <div class="w-100 d-flex justify-content-between">
+        <div class="text-indigo">ID: {{ data.id }}</div>
+        <div class="text-indigo">{{ data.Loan_type1 }}</div>
+      </div>
+      <div>LowLimit: {{ data.LowLimit }}</div>
+      <div>UpperLimit: {{ data.UpperLimit }}</div>
+      <div>DiscountPeriod: {{ data.DiscountPeriod }}</div>
+      <div>DiscountInterest: {{ data.DiscountInterest }}</div>
+      <div>ElevatedInterest: {{ data.ElevatedInterest }}</div>
+      <div class="w-100 pa-2 d-flex justify-space-between" style="gap: 10px;">
+        <div class="w-100">
+          <v-btn class="bg-red text-white" @click="edit_record(data.id)" block>Edit</v-btn>
+        </div>
+        <div class="w-100">
+          <v-btn class="bg-blue text-white" @click="openDeleteDialog(data.id)" block>Delete</v-btn>
+        </div>
+      </div>
+    </v-sheet>
+  </div>
+</div>
 
-          <div v-for="data in resval" class="pt-1 pa-1 bg-blue" :key="data.id">
-            <v-sheet class="w-100 pa-1 d-flex flex-column">
-              <div class="w-100 d-flex justify-content-between" style="display: flex; justify-content: space-between;">
-                <div class="text-indigo">ID: {{ data.id }}</div>
-                <div class="text-indigo">{{ data.Loan_type1 }}</div>
-              </div>
-              <div>LowLimit: {{ data.LowLimit }}</div>
-              <div>UpperLimit: {{ data.UpperLimit }}</div>
-              <div>DiscountPeriod: {{ data.DiscountPeriod }}</div>
-              <div>DiscountInterest: {{ data.DiscountInterest }}</div>
-              <div>ElevatedInterest: {{ data.ElevatedInterest }}</div>
-              <div class="w-100 pa-2 d-flex justify-space-between ga-2">
-                <div class="w-100"><v-btn class="bg-red text-white" @click="edit_record(data.id)" block>Edit</v-btn>
-                </div>
-                <div class="w-100"><v-btn class="bg-blue text-white" @click="openDeleteDialog(data.id)"
-                    block>Delete</v-btn></div>
-              </div>
-            </v-sheet>
-          </div>
-         </div>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="add">

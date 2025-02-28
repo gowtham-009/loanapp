@@ -108,6 +108,7 @@ export default {
 @media(max-width:400px){
   .radio-btn .btn-label {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center; /* Align icon and text */
   background-color: #ccc;
