@@ -76,7 +76,7 @@
         </div>
         <div class="w-100 d-flex ga-1">
           <div class="w-100"><v-btn class="bg-yellow" @click="editdata(globaldata.Loan_appid)" block>Edit</v-btn></div>
-          <div class="w-100"><v-btn class="bg-indigo" @click="selectloandata(globaldata.App_id)" block>Select</v-btn></div>
+          <div class="w-100"><v-btn class="bg-indigo" @click="selectloandata(globaldata.Loan_Number)" block>Select</v-btn></div>
         </div>
       </v-card>
     </div>
@@ -253,6 +253,11 @@ const userdata=async()=>{
     router.push({ path: '/new_loan', query: { data: encodeURIComponent(encryptedValue),  enable: 'true' } });
   }
 
+
+const selectloandata=(loannumber)=>{
+  const encryptedValue = CryptoJS.AES.encrypt(loannumber, secretKey).toString();
+  router.push({ path: '/demo', query: { data: encodeURIComponent(encryptedValue) } });
+}
 </script>
 
 <style>
