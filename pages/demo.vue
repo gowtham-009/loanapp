@@ -74,10 +74,10 @@
     <v-bottom-sheet v-model="sheet">
       <v-card height="500">
         <v-tabs v-model="tab" align-tabs="center">
-        <v-tab value="one">Saved</v-tab>
-        <v-tab value="two"> Months</v-tab>
-        <v-tab value="three">Interest</v-tab>
-        <v-tab value="four">Collect</v-tab>
+        <v-tab value="one">Saved <br>Details</v-tab>
+        <v-tab value="two"> Months<br>{{  }}</v-tab>
+        <v-tab value="three">Interest<br>₹{{ interestamount }}</v-tab>
+        <v-tab value="four">Collect<br>₹{{ total }}</v-tab>
       </v-tabs>
 
       <v-tabs-window v-model="tab">
@@ -118,23 +118,23 @@
 
                     <v-carousel-item>
                       <span>Nproof</span>
-                      <div class="w-100 p">
-                        <img :src=nproof alt="">
+                      <div class="w-100 pa-1">
+                        <img :src=nproof alt=""  width="100%" height="100%">
                       </div>
 
                     </v-carousel-item>
 
                     <v-carousel-item>
                       <span>Nperson</span>
-                      <div class="w-100 p">
-                        <img :src=nperson alt="">
+                      <div class="w-100 pa-1">
+                        <img :src=nperson alt="" width="100%" height="100%">
                       </div>
                     </v-carousel-item>
 
                     <v-carousel-item>
                       <span>Nporul</span>
-                      <div class="w-100 p">
-                        <img :src=nproul alt="">
+                      <div class="w-100 pa-1">
+                        <img :src=nporul alt="" width="100%" height="100%">
                       </div>
                     </v-carousel-item>
                   </v-carousel>
@@ -143,7 +143,67 @@
         </v-tabs-window-item>
 
         <v-tabs-window-item value="two">
-          Two
+          <v-row no-gutters>
+                    <v-col class="pa-1" cols="4">
+                      <div class="w-100 bg-white rounded-lg" style="height: 80px;">
+                        <p class="mt-1 text-h6 text-pink-darken-4">Today Date</p>
+
+                        <p class="text-indigo " style="font-size: 18px;">{{ formatDate(currentdate) }}</p>
+                        <span class="pa-1 text-indigo">(-)</span>
+                      </div>
+                    </v-col>
+                    <v-col class="pa-1" cols="4">
+                      <div class="w-100 bg-white rounded-lg " style="height: 80px;">
+                        <p class="mt-1 text-h6 text-pink-darken-4">Loan Date</p>
+                        <p class="text-indigo " style="font-size: 18px;">{{ loandate }} </p>
+                        <span class="pa-1 text-indigo">(=)</span>
+                      </div>
+                    </v-col>
+                    <v-col class="pa-1" cols="4">
+                      <div class="w-100 bg-white rounded-lg " style="height: 80px;">
+                        <p class="mt-1 text-h6 text-pink-darken-4">Difference</p>
+                        <p class="text-indigo " style="font-size: 18px;">{{ days }} <br><span>Days</span></p>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row no-gutters>
+                    <v-col class="pa-1" cols="12">
+                      <div class="w-100 pa-1 bg-pink-darken-3 rounded-lg ">
+                        <p class="text-h6">That is = <span>{{ monthsval }}</span> Months & <span>{{ daysval }}</span>
+                          Days</p>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row no-gutters>
+                    <v-col class="pa-1" cols="4">
+                      <div class="w-100 bg-white rounded-lg " style="height: 90px;">
+                        <span class="mt-2 text-pink-darken-4" style="font-size: 18px;">Rounded <br> Months</span><br>
+                        <div class="w-100 bg-indigo" style="height: 5px;"></div>
+                        <span class="text-h6 text-indigo"><b>{{ roundedmonths }} (-)</b></span>
+                        <div class="w-100 bg-indigo" style="height: 5px;"></div>
+                      </div>
+                    </v-col>
+                    <v-col class="pa-1" cols="4">
+                      <div class="w-100 bg-white rounded-lg" style="height: 90px;">
+                        <div class="w-100 bg-white rounded-lg " style="height: 90px;">
+                          <span class="mt-2 text-pink-darken-4" style="font-size: 18px;">Advance <br> Months</span><br>
+                          <div class="w-100 bg-indigo" style="height: 5px;"></div>
+                          <span class="text-h6 text-indigo"><b>1.00 (=)</b></span>
+                          <div class="w-100 bg-indigo" style="height: 5px;"></div>
+                        </div>
+                      </div>
+                    </v-col>
+                    <v-col class="pa-1" cols="4">
+                      <div class="w-100 bg-white rounded-lg" style="height: 90px;">
+                        <div class="w-100 bg-white rounded-lg " style="height: 90px;">
+                          <span class="mt-2 text-pink-darken-4" style="font-size: 18px;">Total <br> Months</span><br>
+                          <div class="w-100 bg-indigo" style="height: 5px;"></div>
+                          <span class="text-h6 text-indigo"><b>{{ monthsval }}.00</b></span>
+                          <div class="w-100 bg-indigo" style="height: 5px;"></div>
+                        </div>
+                      </div>
+                    </v-col>
+                  </v-row>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="three">
@@ -187,7 +247,12 @@ const interestamount = ref(0);
 const offbook = ref(0);
 const in_amount = ref(0)
 
+const days=ref('')
+const monthsval=ref('')
+const daysval=ref('')
 const total = ref('')
+const roundedmonths = ref('')
+
 const updateSizes = () => {
   deviceHeight.value = window.innerHeight;
   box1Height.value = deviceHeight.value * 0.05;
@@ -334,21 +399,25 @@ const calculation = (loandate) => {
   const currentDate = formatDater(currentdate.value);
   const timeDifference = currentDate.getTime() - loanDate.getTime();
   const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-
+  days.value=dayDifference
   const monthly_intrest = (loanamount * (discountrate / 100) / 12).toFixed(2)
 
   const no_of_month = Math.round(dayDifference / 30)
-
+ 
   const totalmonths = no_of_month + 0.5
+ 
+  let months=Math.trunc(totalmonths)
+  let dayss=Number(totalmonths.toString().split(".")[1]);
+  monthsval.value=months
+  daysval.value=dayss
+
+  roundedmonths.value=totalmonths
   const totalintrest = parseFloat((totalmonths * monthly_intrest).toFixed(2))
 
   const finalamount = loanamount + totalintrest
 
   total.value = finalamount
   interestamount.value = totalintrest
-
-
-
 
 };
 
@@ -374,6 +443,22 @@ const formatDater = (dateString) => {
   return new Date(dateString);
 };
 
+const getadvancemonth = async (loanData) => {
+  const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/calculate_condition.php';
+  const formdata = new FormData();
+  formdata.append('loantype', loanData[0].Loan_Type);
+  formdata.append('loanvalue', loanData[0].Loan_Value);
+
+  try {
+    const response = await fetch(apiurl, { method: 'POST', body: formdata });
+    if (!response.ok) throw new Error('Failed to fetch response. Try again!');
+    const data = await response.json();
+    discountRate.value = data.DiscountInterest;
+  } catch (error) {
+    errorpopup.value = true;
+    errormessage.value = error.message;
+  }
+};
 
 //bottom sheet
 
