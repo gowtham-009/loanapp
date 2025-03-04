@@ -210,7 +210,63 @@
     </v-tabs-window-item>
 
     <v-tabs-window-item value="three">
-     
+      <div class="w-100 pa bg-white rounded-lg" style="border-bottom: 3px solid rebeccapurple;">
+                    <p class="text-h6 text-pink-darken-4">Discount Calculation @ <span>{{ discountRate }}.00</span>
+                      Paisa</p>
+                  </div>
+                  <div class="w-100 mt-2 d-flex ga-2">
+                    <div class="w-25 pa-1 bg-white rounded-lg">
+                      <p class="text-left text-h6 text-pink-darken-4">{{ loanvalue }}</p>
+
+                      <p class="text-left text-h6 text-pink-darken-4">X {{discountRate}}</p>
+
+                      <div class="w-100 bg-pink-darken-4" style="height: 5px;"></div>
+                      <p class="text-left text-h6 text-pink-darken-4">{{perval}}</p>
+                      <div class="w-100 bg-pink-darken-4" style="height: 5px;"></div>
+                    </div>
+                    <div class="w-25 pa-1 bg-white rounded-lg">
+                      <p class="text-left text-h6 text-pink-darken-4">Discount <br> Months</p>
+                      <div class="w-100 bg-pink-darken-4" style="height: 5px;"></div>
+                      <p class="text-left text-h6 text-pink-darken-4">{{ totmonth }}</p>
+                      <div class="w-100 bg-pink-darken-4" style="height: 5px;"></div>
+                    </div>
+                    <div class="w-50 pa-1 bg-white rounded-lg ">
+                      <p class="text-right text-h6 text-pink-darken-4">Discount <br> Interest</p>
+                      <div class="w-100 bg-pink-darken-4" style="height: 5px;"></div>
+                      <p class="text-white text-h6 bg-pink-darken-4 mt-1">{{  }}</p>
+                      <div class="w-100 bg-pink-darken-4 mt-1" style="height: 5px;"></div>
+                    </div>
+
+                  </div>
+                  <div class="w-100 pa-1 d-flex justify-end ga-2">
+                    <div class="w-25 pa-1 "></div>
+                    <div class="w-25 pa-1 bg-white rounded-lg d-flex justify-center">
+                      <p class="text-right text-h6 text-pink-darken-4">=</p>
+                    </div>
+                    <div class="w-50 pa-1 bg-white rounded-lg d-flex justify-center">
+                      <p class="text-right text-h6 text-pink-darken-4">=</p>
+                    </div>
+                  </div>
+
+                  <div class="w-100 pa-1 d-flex justify-end ga-2">
+                    <div class="w-25 pa-1 "></div>
+                    <div class="w-25 pa-1 bg-white rounded-lg d-flex justify-start">
+                      <p class="text-left text-h6 text-pink-darken-4">Total <br> Months</p>
+                    </div>
+                    <div class="w-50 pa-1 bg-white rounded-lg d-flex justify-end">
+                      <p class="text-right text-h6 text-pink-darken-4">Total <br> Interest</p>
+                    </div>
+                  </div>
+
+                  <div class="w-100 pa-1 d-flex justify-end ga-2">
+                    <div class="w-25 pa-1 "></div>
+                    <div class="w-25 pa-1 bg-black rounded-lg d-flex justify-start">
+                      <p class="text-left text-h6 text-white ">{{}}.00</p>
+                    </div>
+                    <div class="w-50 pa-1 bg-black rounded-lg d-flex justify-end">
+                      <p class="text-right text-h6 text-white ">{{  }}</p>
+                    </div>
+                  </div>
     </v-tabs-window-item>
     <v-tabs-window-item value="four" class="pa-2">
      
@@ -263,7 +319,7 @@ const total = ref('')
 const roundmonths=ref('')
 const advmonth=ref('')
 const totmonth=ref('')
-
+const perval=ref()
 const updateSizes = () => {
   deviceHeight.value = window.innerHeight;
   box1Height.value = deviceHeight.value * 0.05;
@@ -412,6 +468,7 @@ const calculation = (loandate) => {
 
   const loanamount = parseInt(loanvalue.value);
   const discountrate = discountRate.value;
+
   const loanDate = formatDater(loandate);
   const currentDate = formatDater(currentdate.value);
   const timeDifference = currentDate.getTime() - loanDate.getTime();
@@ -419,7 +476,7 @@ const calculation = (loandate) => {
   const monthly_intrest = (loanamount * (discountrate / 100) / 12).toFixed(2)
   const no_of_month = Math.round(dayDifference / 30)
 
- 
+ perval.value=monthly_intrest
 
   const totalmonths = no_of_month + parseFloat(dum.value)
  
