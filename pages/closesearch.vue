@@ -76,8 +76,8 @@
           <p class="text-black">Status: {{ globaldata.Status }}</p>
         </div>
         <div class="w-100 d-flex ga-1">
-          <div class="w-100"><v-btn class="bg-yellow" @click="editdata(globaldata.Loan_appid)" block>Edit</v-btn></div>
-          <div class="w-100"><v-btn class="bg-indigo" @click="selectloandata(globaldata.Loan_Number)" block>Select</v-btn></div>
+          <div class="w-100"><v-btn class="bg-yellow" @click="editdata(globaldata.Loan_appid)" block>Re Open</v-btn></div>
+          <div class="w-100"><v-btn class="bg-indigo" @click="selectloandata(globaldata.Loan_Number)" block>Modify</v-btn></div>
         </div>
       </v-card>
     </div>
