@@ -71,8 +71,9 @@
           <p class="text-black">Mobile Number: {{ globaldata.MobileNum }}</p>
           <p class="text-black">Address: {{ globaldata.Address1 }}</p>
           <p class="text-black">Proof Type: {{ globaldata.ProofType }}</p>
-          <p class="text-black">Proof Details: {{ globaldata.ProofDetails }}</p>
+          <p class="text-black">Proof ID: {{ globaldata.ProofDtails }}</p>
           <p class="text-black">Place: {{ globaldata.Place }}</p>
+          <p class="text-black">Status: {{ globaldata.Status }}</p>
         </div>
         <div class="w-100 d-flex ga-1">
           <div class="w-100"><v-btn class="bg-yellow" @click="editdata(globaldata.Loan_appid)" block>Edit</v-btn></div>
@@ -106,6 +107,7 @@ const box1Height = ref(0)
 const box2Height = ref(0)
 const tab = ref(null)
 
+const nodata=ref('')
 const phoneNumber = ref('')
 
 const place = ref('')
@@ -177,8 +179,6 @@ const userdata=async()=>{
       loading.value=true
       datashow.value=false
       const apiurl='https://vaanam.w3webtechnologies.co.in/loandb/getlastdata_loan.php'
-      
-      
       try {
         const response=await fetch(apiurl,{
           method:"GET",
@@ -188,8 +188,16 @@ const userdata=async()=>{
           throw new Error('Failed your response try again!');
           }
           else{
-            const data=await response.json()   
-            datauser.value=data  
+            const data=await response.json() 
+            if(data.length==0){
+              nodata.value='No Data Found'
+              datauser.value=[]
+            }
+            else{
+              datauser.value=data  
+               nodata.value=''
+            }  
+         
           }
         } catch (error) {
           errorpopup.value=true
@@ -232,7 +240,15 @@ const userdata=async()=>{
           }
           else{
             const data=await response.json()
-            datauser.value=data
+            if(data.length==0){
+              nodata.value='No Data Found'
+              datauser.value=[]
+            }
+            else{
+              datauser.value=data  
+               nodata.value=''
+            }  
+         
            
           }
 
@@ -256,7 +272,7 @@ const userdata=async()=>{
 
 const selectloandata=(loannumber)=>{
   const encryptedValue = CryptoJS.AES.encrypt(loannumber, secretKey).toString();
-  router.push({ path: '/demo', query: { data: encodeURIComponent(encryptedValue) } });
+  router.push({ path: '/calculationform', query: { data: encodeURIComponent(encryptedValue) } });
 }
 </script>
 

@@ -145,7 +145,7 @@
         <v-tabs-window-item value="onetime">
           <v-btn block class="bg-warning" @click="toggleDisabled">Edit</v-btn>
 
-          <v-form v-if="onetimeform" :class="{ 'disabled-box': isDisabled }" v-model="isValid" @submit.prevent>
+          <v-form v-if="onetimeform" :class="{ 'disabled-box': isDisabled }" v-model="isValid" @submit.prevent="handleSubmit3">
 
             <div class="w-100">
               <p class="text-center text-indigo font-weight-bold">Onetime Setup</p>
@@ -206,11 +206,9 @@
             </div>
 
             <div class="w-100 mt-2 d-flex ga-2">
+              
               <div class="w-100">
-                <v-btn class="bg-indigo text-white" @click="handleSubmit3('update')" type="submit" block>Update</v-btn>
-              </div>
-              <div class="w-100">
-                <v-btn class="bg-yellow text-black" @click="handleSubmit3('insert')" type="submit" block>Insert</v-btn>
+                <v-btn class="bg-indigo text-white" type="submit" block>Update</v-btn>
               </div>
             </div>
           </v-form>
@@ -343,12 +341,16 @@ const getlimitsvalue = async () => {
 getlimitsvalue();
 const resval=ref([])
 const nodata=ref('')
-const categoriesfilter_data = async () => {
+
+const categoriesfilter_data = async (alldata) => {
   loadingtab1.value = true;
   errormessage.value = null
 
+  if(alldata=='all'){
+    selectedOption.value='all'
+  }
   const formdatafilter = new FormData();
-  formdatafilter.append('loan_type', selectedOption.value);
+  formdatafilter.append('loan_type', selectedOption.value || alldata);
 
   if (selectedLowerLimit.value) {
     formdatafilter.append('lower_limit', selectedLowerLimit.value);
@@ -376,6 +378,7 @@ const categoriesfilter_data = async () => {
     }
     else{
       nodata.value='Data is Empty'
+      resval.value=[]
     }
   
   } catch (err) {
@@ -387,6 +390,7 @@ const categoriesfilter_data = async () => {
 };
 
 
+categoriesfilter_data('all')
 
 const delete_interest_id = async()=>{
        
@@ -409,7 +413,7 @@ const delete_interest_id = async()=>{
         }
         catch(err){
           errorpopup.value=true
-          errormessage.value=error.message
+          errormessage.value=err.message
           }
           finally{
             dialog.value = false 
@@ -676,6 +680,8 @@ const data_insert = async () => {
 
     setTimeout(() => {
       successpopup.value = false
+      categoriesfilter_data('all')
+      tab.value='saved'
     }, 1000);
   }
 };
@@ -719,6 +725,8 @@ const update_form = async()=>{
 
     setTimeout(() => {
       successpopup.value = false
+      categoriesfilter_data('all')
+      tab.value='saved'
     }, 1000);
         }
     }
@@ -796,35 +804,10 @@ const setdata = async () => {
 }
 setdata()
 
-const handleSubmit3 = async (typemode) => {
-  if (typemode === 'update') {
-    if (!otselectedOption.value) {
-      errorpopup.value = true
-      errormessage.value = 'Fild[1] is Required'
-    }
-    else if (!month.value) {
-      errorpopup.value = true
-      errormessage.value = 'Fild[2] is Required'
-    }
-    else if (!ysselectedOption.value) {
-      errorpopup.value = true
-      errormessage.value = 'Fild[3] value is Required'
-    }
-    else if (!calselectedOption.value) {
-      errorpopup.value = true
-      errormessage.value = 'Fild[4] value is Required'
-    }
-    else if (!govtrate.value) {
-      errorpopup.value = true
-      errormessage.value = 'Fild[5] value is Required'
-    }
-    else {
-      errorpopup.value = false
-      errormessage.value = ''
-      updatedata()
-    }
-  }
-  if (typemode === 'insert') {
+const handleSubmit3 = async () => {
+
+   
+ 
     if (!otselectedOption.value) {
       errorpopup.value = true
       errormessage.value = 'Fild[1] is Required'
@@ -851,51 +834,10 @@ const handleSubmit3 = async (typemode) => {
       settinginsertdata()
     }
   }
-}
 
 
 
-const updatedata = async () => {
-  loading.value = true
-  onetimeform.value = false
-  const apiurl_u = 'https://vaanam.w3webtechnologies.co.in/loandb/setting.php';
-  const formdata = new FormData();
-  formdata.append('datetime', currentDateTime.value);
-  formdata.append('ExtraDays', otselectedOption.value);
-  formdata.append('AdvanceMonths', month.value);
-  formdata.append('HandOver', ysselectedOption.value);
-  formdata.append('CalculationMethod', calselectedOption.value);
-  formdata.append('GovtRate', govtrate.value);
 
-  try {
-    const response = await fetch(apiurl_u, {
-      method: 'POST',
-      body: formdata,
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to submit data. Please check your inputs.');
-    }
-
-    const data = await response.json();
-
-
-  } catch (err) {
-    errorpopup.value = true
-    errormessage.value = err.message
-  } finally {
-    loading.value = false
-    onetimeform.value = true
-    successpopup.value = true
-    successmesage.value = 'Successfully Updated'
-
-    setTimeout(() => {
-      successpopup.value = false
-    }, 1000);
-    isDisabled.value = true
-  }
-
-}
 
 const settinginsertdata = async () => {
   loading.value = true
