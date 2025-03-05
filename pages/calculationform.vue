@@ -22,6 +22,7 @@
 
       <v-form @submit.prevent="handlEvent">
         <div class="d-flex justify-space-between flex-column pa-1" :style="{ height: box2Height + 'px' }">
+         
           <div>
             <span class="d-none">appid{{ loanappid }}</span>
             <p class="text-indigo text-center "><b>Enter Closing Details {{ userappid }}</b></p>
@@ -410,6 +411,7 @@ onBeforeMount(() => {
 const secretKey = "appidsecreatekey001";
 const decryptedValue = ref('');
 
+const updatemode=ref('')
 onMounted(() => {
   const encryptedData = route.query.data;
   if (encryptedData) {
@@ -419,6 +421,10 @@ onMounted(() => {
     content.value = false;
     getloandetails(decryptedValue.value);
 
+  }
+  const modevalue = route.query.mode;
+  if(modevalue){
+    updatemode.value=modevalue
   }
 });
 
@@ -626,7 +632,7 @@ const handlEvent = () => {
   else {
     errorpopup.value = false;
     errormessage.value = '';
-    calculationsubmission()
+    calculationsubmission(updatemode.value);
     statusclose()
   }
 }
@@ -642,11 +648,20 @@ const currentDateTime = ref(getFormattedDateTime());
 
 
 
-const calculationsubmission = async () => {
+const calculationsubmission = async (mode) => {
 
+  console.log('mode',mode)
   loading.value = true;
   content.value=false
-  const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/calculation.php';
+ let apiurl
+  if(mode=='update'){
+     apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/calculation_update.php';
+  }
+  else{
+     apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/calculation.php';
+  }
+
+ 
   const formdata = new FormData();
 
   formdata.append('appid', userappid.value);

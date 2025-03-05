@@ -273,7 +273,7 @@ const userdata=async()=>{
 
 const selectloandata=(loannumber)=>{
   const encryptedValue = CryptoJS.AES.encrypt(loannumber, secretKey).toString();
-  router.push({ path: '/calculationform', query: { data: encodeURIComponent(encryptedValue) } });
+  router.push({ path: '/calculationform', query: { data: encodeURIComponent(encryptedValue), mode:'update' } });
 }
 </script>
 
