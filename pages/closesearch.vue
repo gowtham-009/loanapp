@@ -76,7 +76,7 @@
           <p class="text-black">Status: {{ globaldata.Status }}</p>
         </div>
         <div class="w-100 d-flex ga-1">
-          <div class="w-100"><v-btn class="bg-yellow" @click="editdata(globaldata.Loan_appid)" block>Re Open</v-btn></div>
+          <div class="w-100"><v-btn class="bg-yellow" @click="reopen(globaldata)" block>Re-Open</v-btn></div>
           <div class="w-100"><v-btn class="bg-indigo" @click="selectloandata(globaldata.Loan_Number)" block>Modify</v-btn></div>
         </div>
       </v-card>
@@ -263,14 +263,85 @@ const userdata=async()=>{
     }
 
   }
-  const router=useRouter()
-  const secretKey = "appidsecreatekey001";
-  const editdata=(loanid)=>{
-    const encryptedValue = CryptoJS.AES.encrypt(loanid, secretKey).toString();
-    router.push({ path: '/new_loan', query: { data: encodeURIComponent(encryptedValue),  enable: 'true' } });
+
+  const reopen=async(loandata)=>{
+
+ 
+    loading.value=true
+    datashow.value=false
+    const apiurl='https://vaanam.w3webtechnologies.co.in/loandb/calculation_delete.php'
+    const formdata=new FormData()
+    formdata.append('loannumber', loandata.Loan_Number)
+    try {
+      const response=await fetch(apiurl,{
+          method:"POST",
+          body:formdata
+        })
+
+        if(!response.ok){
+          throw new Error('Failed your response try again!');
+          }
+          else{
+            const data=await response.json()
+            if(data.message=='Deleted successfully'){
+           
+              statusclose(loandata)
+              
+            }
+            else{
+              nodata.value='No Data Found'
+              datauser.value=[]
+            }  
+         
+          }
+        } catch (error) {
+          errorpopup.value=true
+          errormessage.value = error.message
+
   }
+  finally{
+    loading.value=false
+    datashow.value=true
+
+  }
+}
+
+const statusclose = async (opendata) => {
+
+  const apiUrl = 'https:///vaanam.w3webtechnologies.co.in/loandb/open.php';
+  const formData = new FormData();
+
+  formData.append('appid', opendata.App_id);
+  formData.append('loanappid', opendata.Loan_appid );
+  formData.append('loannumber', opendata.Loan_Number);
+  formData.append('status', 'open');
 
 
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch response. Please try again!');
+    }
+
+    const data = await response.json();
+    if(data.message=='updated'){
+      userdata()
+    }
+
+  } catch (err) {
+   errorpopup.value=true
+    errormessage.value = err.message;
+  }
+};
+
+
+
+const router=useRouter()
+const secretKey = "appidsecreatekey001";
 const selectloandata=(loannumber)=>{
   const encryptedValue = CryptoJS.AES.encrypt(loannumber, secretKey).toString();
   router.push({ path: '/calculationform', query: { data: encodeURIComponent(encryptedValue), mode:'update' } });
