@@ -372,7 +372,7 @@ const currentDateTime = ref(getFormattedDateTime());
 const balance_check = async () => {
     loading.value = true;
     error.value = null;
-    const balancecheck_api = 'http://vaanam.w3webtechnologies.co.in/loandb/balance.php';
+    const balancecheck_api = 'https://vaanam.w3webtechnologies.co.in/loandb/balance.php';
     const formdata = new FormData();
     formdata.append('date', formattedDate.value);
     formdata.append('thousand_2', notes1.value);
@@ -412,7 +412,7 @@ const balance_check = async () => {
 const previousbalance = async () => {
     loading.value = true;
     error.value = null;
-    const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/previous_balance.php';
+    const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/previous_balance.php';
     try {
         const response = await fetch(apiurl, {
             method: "POST",
@@ -442,7 +442,7 @@ previousbalance()
 const get_today_datevalue=async()=>{
    
    
-    const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/get_balancerow.php';
+    const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/get_balancerow.php';
     const formdata = new FormData();
     formdata.append('dateval', formattedDate.value);
     try {
