@@ -4,12 +4,13 @@
         <div class="w-100  bg-blue" :style="{ height: boxex1Height + 'px' }"></div>
         <div class="w-100 scroller" :style="{ height: boxex2Height + 'px' }">
 
+         
             <div class="w-100 pa-2 ">
                 <v-form @submit.prevent="balance_check">
                     <v-row class="pa-1" no-gutters>
 
                         <v-col cols="12"> 
-                            <v-text-field label="Select Date "  v-model="formattedDate" type="date" variant="solo"></v-text-field>
+                            <input type="date" class="w-100 text-center rounded mb-2"  v-model="formattedDate" style="height: 50px; border: 1px solid gray;">
                         </v-col>
 
                     </v-row>
@@ -219,7 +220,7 @@
                         <v-col  cols="2">
                         </v-col>
                         <v-col class=" d-flex justify-end align-center" cols="3">
-                            <p class="text-h5">Total</p>
+                            <p class="text-h5 text-grey">Total</p>
                         </v-col>
                         <v-col class=" d-flex justify-center align-center" cols="1">
 

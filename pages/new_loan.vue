@@ -35,8 +35,8 @@
                 <p class="text-blue text-center text-h6 mt-2">New Loan</p>
               </div>
               <div class="w-100 pa-1">
-                <input type="date" class="w-100" v-model="currentdate"
-                  style="outline: none; height: 52px; box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" />
+                <v-text-field variant="solo" v-model="currentdate"  type="date" hide-details readonly />
+                
               </div>
             </div>
 
