@@ -8,238 +8,226 @@
                 <v-form @submit.prevent="balance_check">
                     <v-row class="pa-1" no-gutters>
 
-
-                        <v-col cols="12">
-                            <input v-model="formattedDate"   type="date" class="w-100  rounded-lg text-center pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col cols="12"> 
+                            <v-text-field label="Select Date "  v-model="formattedDate" type="date" variant="solo"></v-text-field>
                         </v-col>
 
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
+                    <v-row  no-gutters>
                         <v-col cols="5">
-                            <input readonly v-model="previousdate" type="text"
-                                class="w-100  rounded-lg text-center pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                            <v-text-field label="Previous Date" class="pa-0 "  readonly v-model="previousdate" type="text" variant="solo"></v-text-field>
                         </v-col>
                         <v-col cols="2"></v-col>
                         <v-col cols="5">
-                            <p class="text-center rounded-lg text-h6" style="border: 1px solid black; padding: 4px;">
-                                Balance:{{ previousamount }}</p>
+                            <v-text-field class="pa-0 text-center" label="Balance"  readonly v-model="previousamount" type="text" variant="solo"></v-text-field>
                         </v-col>
 
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                            <input readonly v-model="num1" type="number" class="w-100  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
+                            <v-text-field class="pa-0 text-center"   readonly v-model="num1" type="text" variant="solo"></v-text-field>
+
+                           
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             <b>X</b>
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input type="number" v-model="notes1" class="w-100 text-left  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 text-center" v-model="notes1" type="text" variant="solo"></v-text-field>
+                        </v-col>
+                        <v-col class=" d-flex justify-center align-center" cols="1">
+                            =
+                        </v-col>
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 right-center"   readonly v-model="row1" type="text" variant="solo"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
+                            <v-text-field class="pa-0 text-center"   readonly v-model="num2" type="text" variant="solo"></v-text-field>
+                        </v-col>
+                        <v-col class=" d-flex justify-center align-center" cols="1">
+                            <b>X</b>
+                        </v-col>
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 text-center" v-model="notes2" type="text" variant="solo"></v-text-field>
+
                         </v-col>
                         <v-col class="pa-1 d-flex justify-center align-center" cols="1">
                             =
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input readonly type="number" :value="row1" class="w-100  rounded-lg pl-1 pa-2 text-right"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 right-center"   readonly v-model="row2" type="text" variant="solo"></v-text-field>
+
+                           
                         </v-col>
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                            <input readonly v-model="num2" type="number" class="w-100  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
+                            <v-text-field class="pa-0 text-center"   readonly v-model="num3" type="text" variant="solo"></v-text-field>
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class="d-flex justify-center align-center" cols="1">
                             <b>X</b>
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input type="number" v-model="notes2" class="w-100 text-left  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 text-center" v-model="notes3" type="text" variant="solo"></v-text-field>
+
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             =
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input readonly type="number" :value="row2" class="w-100 text-right  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 right-center"   readonly v-model="row3" type="text" variant="solo"></v-text-field>
+
                         </v-col>
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                            <input readonly v-model="num3" type="number" class="w-100  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
+                            <v-text-field class="pa-0 text-center"   readonly v-model="num4" type="text" variant="solo"></v-text-field>
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             <b>X</b>
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input type="number" v-model="notes3" class="w-100 text-left  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 text-center" v-model="notes4" type="text" variant="solo"></v-text-field>
+
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             =
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input readonly type="number" :value="row3" class="w-100 text-right  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 right-center"   readonly v-model="row4" type="text" variant="solo"></v-text-field>
+
                         </v-col>
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                            <input readonly v-model="num4" type="number" class="w-100  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
+                            <v-text-field class="pa-0 text-center"   readonly v-model="num5" type="text" variant="solo"></v-text-field>
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             <b>X</b>
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input type="number" v-model="notes4" class="w-100 text-left  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 text-center" v-model="notes5" type="text" variant="solo"></v-text-field>
+
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             =
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input readonly type="number" :value="row4" class="w-100 text-right  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 right-center"   readonly v-model="row5" type="text" variant="solo"></v-text-field>
+
                         </v-col>
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                            <input readonly v-model="num5" type="number" class="w-100  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
+                            <v-text-field class="pa-0 text-center"   readonly v-model="num6" type="text" variant="solo"></v-text-field>
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             <b>X</b>
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input type="number" v-model="notes5" class="w-100 text-left  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 text-center" v-model="notes6" type="text" variant="solo"></v-text-field>
+
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             =
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input readonly type="number" :value="row5" class="w-100 text-right  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 right-center"   readonly v-model="row6" type="text" variant="solo"></v-text-field>
+
                         </v-col>
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                            <input readonly v-model="num6" type="number" class="w-100  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
+                            <v-text-field class="pa-0 text-center"   readonly v-model="num7" type="text" variant="solo"></v-text-field>
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             <b>X</b>
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input type="number" v-model="notes6" class="w-100 text-left  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 text-center" v-model="notes7" type="text" variant="solo"></v-text-field>
+
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             =
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input readonly type="number" :value="row6" class="w-100 text-right  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 right-center"   readonly v-model="row7" type="text" variant="solo"></v-text-field>
+
                         </v-col>
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                            <input readonly v-model="num7" type="number" class="w-100  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
+                            <v-text-field class="pa-0 text-center"   readonly v-model="num8" type="text" variant="solo"></v-text-field>
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             <b>X</b>
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input type="number" v-model="notes7" class="w-100 text-left  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 text-center" v-model="notes8" type="text" variant="solo"></v-text-field>
+
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             =
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input readonly type="number" :value="row7" class="w-100 text-right  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 right-center"   readonly v-model="row8" type="text" variant="solo"></v-text-field>
+
                         </v-col>
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                            <input readonly v-model="num8" type="number" class="w-100  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
+                            <v-text-field class="pa-0 text-center"   readonly v-model="num9" type="text" variant="solo"></v-text-field>
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             <b>X</b>
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input type="number" v-model="notes8" class="w-100 text-left  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 text-center" v-model="notes9" type="text" variant="solo"></v-text-field>
+
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             =
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input readonly type="number" :value="row8" class="w-100 text-right  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 right-center"   readonly v-model="row9" type="text" variant="solo"></v-text-field>
+
                         </v-col>
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                            <input readonly v-model="num9" type="number" class="w-100  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
+                            <v-text-field class="pa-0 text-center"   readonly v-model="num10" type="text" variant="solo"></v-text-field>
+
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
                             <b>X</b>
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input type="number" v-model="notes9" class="w-100  rounded-lg pl-1 pa-2 text-left"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 text-center" v-model="notes10" type="text" variant="solo"></v-text-field>
+
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class="d-flex justify-center align-center" cols="1">
                             =
                         </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input readonly type="number" :value="row9" class="w-100 text-right  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="4">
+                            <v-text-field class="pa-0 right-center"   readonly v-model="row10" type="text" variant="solo"></v-text-field>
+
                         </v-col>
                     </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                            <input readonly v-model="num10" type="number" class="w-100  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    <v-row  no-gutters>
+                        <v-col  cols="2">
                         </v-col>
-                        <v-col class="pa-1  d-flex justify-center align-center" cols="1">
-                            <b>X</b>
-                        </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input type="number" v-model="notes10" class="w-100  rounded-lg pl-1 pa-2 text-left"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
-                        </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
-                            =
-                        </v-col>
-                        <v-col class="pa-1" cols="4">
-                            <input readonly type="number" :value="row10" class="w-100 text-right  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
-                        </v-col>
-                    </v-row>
-                    <v-row class="pa-1" no-gutters>
-                        <v-col class="pa-1" cols="2">
-                        </v-col>
-                        <v-col class="pa-1 d-flex justify-end" cols="3">
+                        <v-col class=" d-flex justify-end align-center" cols="3">
                             <p class="text-h5">Total</p>
                         </v-col>
-                        <v-col class="pa-1 d-flex justify-center align-center" cols="1">
+                        <v-col class=" d-flex justify-center align-center" cols="1">
 
                         </v-col>
-                        <v-col class="pa-1" cols="6">
-                            <input readonly type="number" :value="total" class="w-100 text-right  rounded-lg pl-1 pa-2"
-                                style="outline: none; border: 1px solid black;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                        <v-col  cols="6">
+                            <v-text-field class="pa-0 right-center"   readonly :value="total" type="text" variant="solo"></v-text-field>
+
+                           
                         </v-col>
 
 
@@ -247,7 +235,7 @@
                     <v-row no-gutters>
                         <v-col cols="2"></v-col>
                         <v-col cols="10">
-                            <v-btn class="pa-2 bg-blue text-white" size="large" type="submit" block>Submit</v-btn>
+                            <v-btn class="pa-2 bg-green text-white" size="large" type="submit" block>Submit</v-btn>
                         </v-col>
                     </v-row>
                 </v-form>
@@ -260,7 +248,7 @@
 
 
 <script setup>
-import { ref, onMounted,watch, onBeforeUnmount, computed } from 'vue';
+import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue';
 import { useRouter } from 'vue-router'
 
 
@@ -287,20 +275,20 @@ const boxex2Height = ref(0);
 const boxex3Height = ref(0);
 
 const currentdate = new Date();
-  const formattedDate = ref(`${currentdate.getFullYear()}-${String(currentdate.getMonth() + 1).padStart(2, '0')}-${String(currentdate.getDate()).padStart(2, '0')}`);
-  
+const formattedDate = ref(`${currentdate.getFullYear()}-${String(currentdate.getMonth() + 1).padStart(2, '0')}-${String(currentdate.getDate()).padStart(2, '0')}`);
+
 currentdate.setDate(currentdate.getDate() - 1);
 // Values for denominations
-const num1 = 2000;
-const num2 = 500;
-const num3 = 200;
-const num4 = 100;
-const num5 = 50;
-const num6 = 20;
-const num7 = 10;
-const num8 = 5;
-const num9 = 2;
-const num10 = 1;
+const num1 = 2000.00
+const num2 = 500.00;
+const num3 = 200.00;
+const num4 = 100.00;
+const num5 = 50.00;
+const num6 = 20.00;
+const num7 = 10.00;
+const num8 = 5.00;
+const num9 = 2.00;
+const num10 = 1.00;
 
 // Reactive note counts and state
 const notes1 = ref(0);
@@ -313,6 +301,10 @@ const notes7 = ref(0);
 const notes8 = ref(0);
 const notes9 = ref(0);
 const notes10 = ref(0);
+
+
+
+
 const loading = ref(true);
 const error = ref(null);
 
@@ -331,21 +323,31 @@ const updateDeviceDimensions = () => {
 };
 
 // Computed row totals
-const row1 = computed(() => num1 * notes1.value);
-const row2 = computed(() => num2 * notes2.value);
-const row3 = computed(() => num3 * notes3.value);
-const row4 = computed(() => num4 * notes4.value);
-const row5 = computed(() => num5 * notes5.value);
-const row6 = computed(() => num6 * notes6.value);
-const row7 = computed(() => num7 * notes7.value);
-const row8 = computed(() => num8 * notes8.value);
-const row9 = computed(() => num9 * notes9.value);
-const row10 = computed(() => num10 * notes10.value);
+const row1 = computed(() => (num1 * notes1.value).toFixed(2));
+const row2 = computed(() => (num2 * notes2.value).toFixed(2));
+const row3 = computed(() => (num3 * notes3.value).toFixed(2));
+const row4 = computed(() => (num4 * notes4.value).toFixed(2));
+const row5 = computed(() => (num5 * notes5.value).toFixed(2));
+const row6 = computed(() => (num6 * notes6.value).toFixed(2));
+const row7 = computed(() => (num7 * notes7.value).toFixed(2));
+const row8 = computed(() => (num8 * notes8.value).toFixed(2));
+const row9 = computed(() => (num9 * notes9.value).toFixed(2));
+const row10 = computed(() => (num10 * notes10.value).toFixed(2));
 
 // Total computed property
 const total = computed(() => {
-    return row1.value + row2.value + row3.value + row4.value + row5.value +
-        row6.value + row7.value + row8.value + row9.value + row10.value;
+    return (
+        parseFloat(row1.value) +
+        parseFloat(row2.value) +
+        parseFloat(row3.value) +
+        parseFloat(row4.value) +
+        parseFloat(row5.value) +
+        parseFloat(row6.value) +
+        parseFloat(row7.value) +
+        parseFloat(row8.value) +
+        parseFloat(row9.value) +
+        parseFloat(row10.value)
+    ).toFixed(2); // Ensures 2 decimal places
 });
 
 // Lifecycle hooks
@@ -397,7 +399,7 @@ const balance_check = async () => {
             throw new Error('Failed to fetch limit values.');
         } else {
             const data = await response.json();
-            console.log(data); // Handle response data as needed
+
         }
     } catch (err) {
         error.value = err.message;
@@ -409,39 +411,12 @@ const balance_check = async () => {
 };
 
 
-const previousbalance = async () => {
-    loading.value = true;
-    error.value = null;
-    const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/previous_balance.php';
-    try {
-        const response = await fetch(apiurl, {
-            method: "POST",
-
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch previous balance values.');
-        } else {
-            const data = await response.json();
-            previousamount.value = data.data.DayTotal
-            let rawDate = data.data.Date; // Assuming this is in a standard format like "YYYY-MM-DD"
-            let dateObj = new Date(rawDate);
-
-            let formattedDate = dateObj.getDate().toString().padStart(2, '0') + '-' +
-                (dateObj.getMonth() + 1).toString().padStart(2, '0') + '-' +
-                dateObj.getFullYear();
-            previousdate.value = formattedDate;
-        }
-    } catch (err) {
-        error.value = err.message;
-    }
-}
-
-previousbalance()
 
 
-const get_today_datevalue=async()=>{
-   
-   
+
+const get_today_datevalue = async () => {
+
+
     const apiurl = 'https://vaanam.w3webtechnologies.co.in/loandb/get_balancerow.php';
     const formdata = new FormData();
     formdata.append('dateval', formattedDate.value);
@@ -455,18 +430,28 @@ const get_today_datevalue=async()=>{
             throw new Error('Failed to fetch previous balance values.');
         } else {
             const data = await response.json();
-            notes1.value=data.data.t_thousand ||'0'
-            notes2.value=data.data.f_hundred ||'0'
-            notes3.value=data.data.t_hundred ||'0'
-            notes4.value=data.data.o_hundred ||'0'
-            notes5.value=data.data.f_fifty ||'0'
-            notes6.value=data.data.t_twenty ||'0'
-            notes7.value=data.data.t_ten ||'0'
-            notes8.value=data.data.f_five ||'0'
-            notes9.value=data.data.t_two ||'0'
-            notes10.value=data.data.o_one ||'0'
-          
-         
+            notes1.value = data.t_thousand || '0'
+            notes2.value = data.f_hundred || '0'
+            notes3.value = data.t_hundred || '0'
+            notes4.value = data.o_hundred || '0'
+            notes5.value = data.f_fifty || '0'
+            notes6.value = data.t_twenty || '0'
+            notes7.value = data.t_ten || '0'
+            notes8.value = data.f_five || '0'
+            notes9.value = data.t_two || '0'
+            notes10.value = data.o_one || '0'
+
+            let previoustot=parseFloat(data.prevDayTotal)
+            previousamount.value = previoustot.toFixed(2)
+            let date = new Date(formattedDate.value);
+            date.setDate(date.getDate() - 1);
+
+
+            let previousDate = date.toLocaleDateString('en-GB').split('/').join('-'); // Format as dd-mm-yyyy
+
+            previousdate.value = previousDate; // Assign formatted date
+
+
         }
     } catch (err) {
         error.value = err.message;
@@ -475,13 +460,13 @@ const get_today_datevalue=async()=>{
 
 
 
-    onMounted(() => {
-        get_today_datevalue()
-    });
+onMounted(() => {
+    get_today_datevalue()
+});
 
-    watch(formattedDate, () => {
-        get_today_datevalue()
-    });
+watch(formattedDate, () => {
+    get_today_datevalue()
+});
 
 
 </script>
@@ -495,5 +480,9 @@ body {
 .scroller {
     overflow: hidden;
     overflow-y: scroll;
+}
+
+.right-center input {
+    text-align: right;
 }
 </style>
