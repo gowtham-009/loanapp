@@ -8,7 +8,7 @@
 
     <form @submit.prevent="handleEventFun" v-if="userform">
       <div v-if="errorpopup" style="position: absolute; width: 100%; z-index: 10;">
-        <v-alert  type="error">
+        <v-alert  type="error" @click="closepopup()">
           {{ errormessage }}
         </v-alert>
 
@@ -471,6 +471,10 @@ const update_form = async () => {
   }
 }
 
+
+const closepopup=()=>{
+  errorpopup.value=false
+}
 </script>
 
 <style scoped>

@@ -1,694 +1,286 @@
 <template>
   <div v-if="isAuthenticated">
-    <div class="w-100 pa-1 bg-indigo" :style="{ height: box1 + 'px' }"></div>
-
-    <div class="w-100" v-if="error" @click="remove()">
-      <v-alert type="error">{{ error }}
+    <div v-if="errorpopup" style="position: absolute; width: 100%; z-index: 10;">
+      <v-alert type="error">
+        {{ errormessage }}
       </v-alert>
     </div>
+    <div class="w-100 bg-indigo d-flex justify-center" :style="{ height: box1Height + 'px' }">
+      <logo />
+    </div>
 
-    <v-form class="d-flex flex-column pa-1" :style="{ height: box2 + 'px' }" @submit.prevent="handleSubmit">
-      <input style="border: 1px solid black;" disabled type="text" v-model="mydate" hidden />
-      <input style="border: 1px solid black;" disabled type="text" v-model="loanappid" hidden />
-      <input style="border: 1px solid black;" disabled type="text" v-model="appid" hidden />
-      <p class="text-center text-indigo mb-2"><b>Enter Closing Details SF-AA-<span>{{ loannumber }}</span></b></p>
-      <div class="w-100 h-100">
-        <v-row no-gutters>
-          <v-col class="pa-1" cols="6">
-            <v-text-field v-model="loannumber" label="Loan Number" variant="outlined" readonly></v-text-field>
-          </v-col>
-          <v-col class="pa-1" cols="6">
-            <v-text-field v-model="loantype" label="Loan Type" variant="outlined" readonly></v-text-field>
-          </v-col>
-        </v-row>
+    <div class="w-100" :style="{ height: box2Height + 'px' }" >
+      <v-tabs v-model="tab" align-tabs="center">
+        <v-tab value="mobile">Mobile Number</v-tab>
+        <v-tab value="name">Name</v-tab>
+        <v-tab value="proof">Proof ID</v-tab>
+      </v-tabs>
 
-        <v-row no-gutters>
-          <v-col class="pa-1" cols="6">
-            <v-text-field v-model="loandate" label="Loan Date" variant="outlined" readonly></v-text-field>
-          </v-col>
-          <v-col class="pa-1" cols="6">
-            <v-text-field v-model="loanvalue" label="Loan Value" variant="outlined" readonly></v-text-field>
-          </v-col>
-        </v-row>
+      <v-tabs-window v-model="tab">
+        <v-tabs-window-item value="mobile">
+          <v-form @submit.prevent="filterdata('mobile')" class="pa-1">
+            <v-text-field class="mt-1" v-model="phoneNumber" label="Mobile Number" variant="solo-filled"
+              @input="validateInput" :rules="[validateLength]" maxlength="10"></v-text-field>
+            <v-btn class="bg-deep-purple-accent-4 mt-1" size="x-large" type="submit" block>Search</v-btn>
+          </v-form>
+        </v-tabs-window-item>
 
-        <v-row no-gutters>
-          <v-col class="pa-1" cols="12">
-            <span>Return Date</span>
-            <input v-model="currentdate" type="date" style="border: 1px solid gray; height: 50px;" name="" readonly
-              class="w-100 pa-1 rounded-lg">
-          </v-col>
-          <v-col class="pa-1" cols="12">
-            <div class="mb-7">Interest %</div>
-            <v-slider v-model="discountRate" thumb-label="always" :min="0" :max="100" :step="1"
-              @change="handleDiscountRateInput" />
-            <!-- <v-text-field label="Interest" @input="handleDiscountRateInput" v-model="discountRate" variant="outlined" ></v-text-field> -->
-            <v-text-field label="Given Amount" @input="handleGivenAmountInput" type="number" v-model="givenamount"
-              variant="outlined"></v-text-field>
-          </v-col>
-        </v-row>
+        <v-tabs-window-item value="name">
+          <v-form @submit.prevent="filterdata('nameplace')" class="pa-1">
+            <v-text-field class="mt-3" v-model="name" variant="solo-filled" type="text" hide-details maxlength="25"
+              @keypress="allowOnlyAlphabets($event)" @input="name = name.toUpperCase()"
+              label="Name (type min 25 characters)">
+            </v-text-field>
 
-        <v-row no-gutters>
-          <v-col class="pa-1" cols="6">
-            <p>Interest Amount</p>
-            <!-- <p>{{ interestamount }}</p> -->
-          </v-col>
-          <v-col class="pa-1" cols="6">
-            <v-text-field variant="outlined" type="number" v-model="interestamount" readonly></v-text-field>
-          </v-col>
-        </v-row>
+            <v-text-field class="mt-2" v-model="place" variant="solo-filled" type="text" hide-details maxlength="25"
+              @keypress="allowOnlyAlphabets($event)" @input="place = place.toUpperCase()"
+              label="Place (type min 25 characters)">
+            </v-text-field>
+            <v-btn class="mt-2 bg-deep-purple-accent-4" size="x-large" type="submit" block>Search</v-btn>
+          </v-form>
+        </v-tabs-window-item>
 
-        <v-row no-gutters>
-          <v-col class="pa-1" cols="6">
-            <p>OffBook</p>
-            <p>{{ offbook }}</p>
-          </v-col>
-          <v-col class="pa-1" cols="6">
-            <v-text-field variant="outlined" type="number" v-model="offbook" readonly></v-text-field>
-          </v-col>
-        </v-row>
-      </div>
+        <v-tabs-window-item value="proof">
+          <v-form @submit.prevent="filterdata('proof')">
+            <CheckboxButton v-for="option in options" :key="option.value" :name="'proof-type'" :label="option.label"
+              :value="option.value" v-model="selectedOption" class="pa-2" />
 
-      <div class="w-100 pa-1  d-flex ga-1">
-        <div class="w-100"><v-btn type="button" class="btn bg-blue" @click="sheet = !sheet" block>{{ total }}</v-btn>
+            <v-text-field class="mt-2" variant="solo-filled" v-model="proofid" :counter="16" :rules="proofRules"
+              label="Proof ID / Number" placeholder="Enter Unique ID Number" hide-details
+              @input="proofid = proofid.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 16)"></v-text-field>
+
+            <v-btn class="mt-3 bg-deep-purple-accent-4" size="x-large" type="submit" block>Search</v-btn>
+          </v-form>
+        </v-tabs-window-item>
+      </v-tabs-window>
+
+      <div class="d-flex justify-center" v-if="loading">
+      <v-progress-circular color="purple" indeterminate></v-progress-circular>
+  </div>
+
+  <div class="w-100 d-flex flex-column ga-2 cont" v-if="datashow">
+    <p class="text-center">{{ nodata }}</p>
+    <div v-for="globaldata in datauser" :key="globaldata.ID">
+      <v-card class="bg-grey-lighten-5 pa-2" variant="tonal">
+        <div class="w-100 d-flex justify-space-between pa-2">
+          <p class="text-indigo">ID: {{ globaldata.ID }}</p>
+          <p class="text-indigo">APP ID: {{ globaldata.App_id }}</p>
         </div>
-
-
-        <div class="w-100"><v-btn @click="dialog = true" class="btn bg-green" block>Submit & Close</v-btn></div>
-      </div>
-
-
-
-
-
-
-      <v-dialog v-model="dialog" width="auto">
-        <v-card max-width="400" title="Are you sure submit calculation ?">
-          <div class="w-100 pa-1 d-flex justify-end ga-2">
-            <div>
-              <v-btn @click="handleSubmit" class="btn bg-blue ">Yes</v-btn>
-            </div>
-            <div>
-              <v-btn text="No" @click="dialog = false"></v-btn>
-            </div>
-          </div>
-
-
-        </v-card>
-      </v-dialog>
-    </v-form>
-
-
-
-
-    <v-bottom-sheet v-model="sheet">
-      <v-card class="text-center " height="500">
-        <v-card-text class="pa-0">
-          <v-card>
-            <v-tabs v-model="tab" class="w-100 ">
-              <v-tab value="one" :class="{'tab-one-active': tab === 'one'}">Saved <br>Details</v-tab>
-              <v-tab value="two" :class="{'tab-one-active': tab === 'two'}">Months <br>{{ monthsval }}.00</v-tab>
-              <v-tab value="three" :class="{'tab-one-active': tab === 'three'}">Interest <br> ₹{{ interestamount
-                }}</v-tab>
-              <v-tab value="four" :class="{'tab-one-active': tab === 'four'}">Collect <br>{{ total }}</v-tab>
-            </v-tabs>
-            <hr>
-
-            <v-card-text>
-              <v-tabs-window v-model="tab">
-                <v-tabs-window-item value="one">
-                  <v-carousel>
-                    <v-carousel-item>
-                      <div class="w-100 d-flex justify-space-between">
-                        <span class="text-gray">Loan Details:</span>
-                        <span class="text-gray">{{ loantype }}=> {{ weight }}g</span>
-                      </div>
-                      <div class="w-100 d-flex justify-end">
-                        <span class="text-gray">{{ details }}</span>
-                      </div>
-                      <div class="w-100 mt-2  d-flex justify-space-between">
-                        <span class="text-gray">Name:</span>
-                        <span class="text-gray">{{ name }}</span>
-                      </div>
-                      <div class="w-100  d-flex justify-space-between">
-                        <span class="text-gray">Mobile Number:</span>
-                        <span class="text-gray">{{ mobilenumber }}</span>
-                      </div>
-                      <div class="w-100 mt-2 d-flex justify-space-between">
-                        <span class="text-gray">ID Details:</span>
-                        <span class="text-gray">{{ idtype }}</span>
-                      </div>
-                      <div class="w-100 d-flex justify-space-between">
-                        <span class="text-gray">ID Number:</span>
-                        <span class="text-gray">{{ idnumber }}</span>
-                      </div>
-
-                      <div class="w-100 d-flex justify-start mt-2">
-                        <p>Address:</p>
-                      </div>
-                      <div class="w-100 d-flex justify-start ">
-                        <p>{{address}}</p>
-                      </div>
-                    </v-carousel-item>
-
-                    <v-carousel-item>
-                      <span>Nproof</span>
-                      <div class="w-100 p">
-                        <img :src=nproof alt="">
-                      </div>
-
-                    </v-carousel-item>
-
-                    <v-carousel-item>
-                      <span>Nperson</span>
-                      <div class="w-100 p">
-                        <img :src=nperson alt="">
-                      </div>
-                    </v-carousel-item>
-
-                    <v-carousel-item>
-                      <span>Nporul</span>
-                      <div class="w-100 p">
-                        <img :src=nproul alt="">
-                      </div>
-                    </v-carousel-item>
-                  </v-carousel>
-
-
-                </v-tabs-window-item>
-
-                <v-tabs-window-item value="two" class="bg-pink-lighten-3 pa-0">
-                  <v-row no-gutters>
-                    <v-col class="pa-1" cols="4">
-                      <div class="w-100 bg-white rounded-lg" style="height: 80px;">
-                        <p class="mt-1 text-h6 text-pink-darken-4">Today Date</p>
-
-                        <p class="text-indigo " style="font-size: 18px;">{{ formattedDate }}</p>
-                        <span class="pa-1 text-indigo">(-)</span>
-                      </div>
-                    </v-col>
-                    <v-col class="pa-1" cols="4">
-                      <div class="w-100 bg-white rounded-lg " style="height: 80px;">
-                        <p class="mt-1 text-h6 text-pink-darken-4">Loan Date</p>
-                        <p class="text-indigo " style="font-size: 18px;">{{ loandate }} </p>
-                        <span class="pa-1 text-indigo">(=)</span>
-                      </div>
-                    </v-col>
-                    <v-col class="pa-1" cols="4">
-                      <div class="w-100 bg-white rounded-lg " style="height: 80px;">
-                        <p class="mt-1 text-h6 text-pink-darken-4">Difference</p>
-                        <p class="text-indigo " style="font-size: 18px;">{{ days }} <br><span>Days</span></p>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row no-gutters>
-                    <v-col class="pa-1" cols="12">
-                      <div class="w-100 pa-1 bg-pink-darken-3 rounded-lg ">
-                        <p class="text-h6">That is = <span>{{ roundmonthv }}</span> Months & <span>{{ mdayv }}</span>
-                          Days</p>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row no-gutters>
-                    <v-col class="pa-1" cols="4">
-                      <div class="w-100 bg-white rounded-lg " style="height: 90px;">
-                        <span class="mt-2 text-pink-darken-4" style="font-size: 18px;">Rounded <br> Months</span><br>
-                        <div class="w-100 bg-indigo" style="height: 5px;"></div>
-                        <span class="text-h6 text-indigo"><b>{{ rm }}.00 (-)</b></span>
-                        <div class="w-100 bg-indigo" style="height: 5px;"></div>
-                      </div>
-                    </v-col>
-                    <v-col class="pa-1" cols="4">
-                      <div class="w-100 bg-white rounded-lg" style="height: 90px;">
-                        <div class="w-100 bg-white rounded-lg " style="height: 90px;">
-                          <span class="mt-2 text-pink-darken-4" style="font-size: 18px;">Advance <br> Months</span><br>
-                          <div class="w-100 bg-indigo" style="height: 5px;"></div>
-                          <span class="text-h6 text-indigo"><b>1.00 (=)</b></span>
-                          <div class="w-100 bg-indigo" style="height: 5px;"></div>
-                        </div>
-                      </div>
-                    </v-col>
-                    <v-col class="pa-1" cols="4">
-                      <div class="w-100 bg-white rounded-lg" style="height: 90px;">
-                        <div class="w-100 bg-white rounded-lg " style="height: 90px;">
-                          <span class="mt-2 text-pink-darken-4" style="font-size: 18px;">Total <br> Months</span><br>
-                          <div class="w-100 bg-indigo" style="height: 5px;"></div>
-                          <span class="text-h6 text-indigo"><b>{{ monthsval }}.00</b></span>
-                          <div class="w-100 bg-indigo" style="height: 5px;"></div>
-                        </div>
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-tabs-window-item>
-
-                <v-tabs-window-item value="three" class="bg-pink-lighten-3 pa-1">
-                  <div class="w-100 pa bg-white rounded-lg" style="border-bottom: 3px solid rebeccapurple;">
-                    <p class="text-h6 text-pink-darken-4">Discount Calculation @ <span>{{ discountRate }}.00</span>
-                      Paisa</p>
-                  </div>
-                  <div class="w-100 mt-2 d-flex ga-2">
-                    <div class="w-25 pa-1 bg-white rounded-lg">
-                      <p class="text-left text-h6 text-pink-darken-4">{{ loanvalue }}.00</p>
-
-                      <p class="text-left text-h6 text-pink-darken-4">X {{discountRate}}.00</p>
-
-                      <div class="w-100 bg-pink-darken-4" style="height: 5px;"></div>
-                      <p class="text-left text-h6 text-pink-darken-4">{{perval}}</p>
-                      <div class="w-100 bg-pink-darken-4" style="height: 5px;"></div>
-                    </div>
-                    <div class="w-25 pa-1 bg-white rounded-lg">
-                      <p class="text-left text-h6 text-pink-darken-4">Discount <br> Months</p>
-                      <div class="w-100 bg-pink-darken-4" style="height: 5px;"></div>
-                      <p class="text-left text-h6 text-pink-darken-4">{{ monthsval }}.00</p>
-                      <div class="w-100 bg-pink-darken-4" style="height: 5px;"></div>
-                    </div>
-                    <div class="w-50 pa-1 bg-white rounded-lg ">
-                      <p class="text-right text-h6 text-pink-darken-4">Discount <br> Interest</p>
-                      <div class="w-100 bg-pink-darken-4" style="height: 5px;"></div>
-                      <p class="text-white text-h6 bg-pink-darken-4 mt-1">{{ interestamount }}</p>
-                      <div class="w-100 bg-pink-darken-4 mt-1" style="height: 5px;"></div>
-                    </div>
-
-                  </div>
-                  <div class="w-100 pa-1 d-flex justify-end ga-2">
-                    <div class="w-25 pa-1 "></div>
-                    <div class="w-25 pa-1 bg-white rounded-lg d-flex justify-center">
-                      <p class="text-right text-h6 text-pink-darken-4">=</p>
-                    </div>
-                    <div class="w-50 pa-1 bg-white rounded-lg d-flex justify-center">
-                      <p class="text-right text-h6 text-pink-darken-4">=</p>
-                    </div>
-                  </div>
-
-                  <div class="w-100 pa-1 d-flex justify-end ga-2">
-                    <div class="w-25 pa-1 "></div>
-                    <div class="w-25 pa-1 bg-white rounded-lg d-flex justify-start">
-                      <p class="text-left text-h6 text-pink-darken-4">Total <br> Months</p>
-                    </div>
-                    <div class="w-50 pa-1 bg-white rounded-lg d-flex justify-end">
-                      <p class="text-right text-h6 text-pink-darken-4">Total <br> Interest</p>
-                    </div>
-                  </div>
-
-                  <div class="w-100 pa-1 d-flex justify-end ga-2">
-                    <div class="w-25 pa-1 "></div>
-                    <div class="w-25 pa-1 bg-black rounded-lg d-flex justify-start">
-                      <p class="text-left text-h6 text-white ">{{monthsval}}.00</p>
-                    </div>
-                    <div class="w-50 pa-1 bg-black rounded-lg d-flex justify-end">
-                      <p class="text-right text-h6 text-white ">{{ interestamount }}</p>
-                    </div>
-                  </div>
-                </v-tabs-window-item>
-                <v-tabs-window-item value="four" class="bg-pink-lighten-3 pa-1">
-                  <div class="w-100 d-flex ga-2">
-                    <div class="w-75 pa-1 bg-white rounded-lg" style="border-bottom: 3px solid rebeccapurple;">
-                      <p class="text-left text-h6 text-pink-darken-4">Total Months</p>
-                    </div>
-                    <div class="w-25 pa-1 bg-white rounded-lg" style="border-bottom: 3px solid rebeccapurple;">
-                      <p class="text-left text-h6 text-pink-darken-4">{{ monthsval }}.00</p>
-                    </div>
-                  </div>
-                  <div class="w-100 pa-1 mt-2 d-flex ga-2">
-                    <div class="w-75 pa-1 bg-white rounded-lg" style="border-bottom: 3px solid rebeccapurple;">
-                      <p class="text-left text-h6 text-pink-darken-4">Interest Amount</p>
-                    </div>
-                    <div class="w-25 pa-1 bg-white rounded-lg" style="border-bottom: 3px solid rebeccapurple;">
-                      <p class="text-left text-h6 text-pink-darken-4">{{ interestamount }}.00</p>
-                    </div>
-                  </div>
-                  <div class="w-100 pa-1 mt-2 d-flex justify-end">
-                    <div class="w-25 bg-white d-flex justify-center  rounded-lg"
-                      style="border-bottom: 3px solid rebeccapurple;">
-                      <p class="text-left text-h6 text-indigo">+</p>
-                    </div>
-                  </div>
-                  <div class="w-100 pa-1 mt-2 d-flex ga-2">
-                    <div class="w-75 pa-1 bg-white rounded-lg" style="border-bottom: 3px solid rebeccapurple;">
-                      <p class="text-left text-h6 text-pink-darken-4">Loan Value</p>
-                    </div>
-                    <div class="w-25 pa-1 bg-white rounded-lg" style="border-bottom: 3px solid rebeccapurple;">
-                      <p class="text-left text-h6 text-pink-darken-4">{{ loanvalue }}.00</p>
-                    </div>
-                  </div>
-                  <div class="w-100 pa-1 mt-2 d-flex justify-end">
-                    <div class="w-25 bg-white d-flex justify-center  rounded-lg"
-                      style="border-bottom: 3px solid rebeccapurple;">
-                      <p class="text-left text-h6 text-indigo">=</p>
-                    </div>
-                  </div>
-                  <div class="w-100 pa-1 mt-2 d-flex ga-2">
-                    <div class="w-75 pa-1 bg-indigo rounded-lg">
-                      <p class="text-left text-h6 text-white">Collected Amount</p>
-                    </div>
-                    <div class="w-25 pa-1 bg-indigo rounded-lg" style="border-bottom: 3px solid rebeccapurple;">
-                      <p class="text-left text-h6 text-white">{{ total }}</p>
-                    </div>
-                  </div>
-                </v-tabs-window-item>
-              </v-tabs-window>
-            </v-card-text>
-          </v-card>
-
-        </v-card-text>
+        <div class="w-100 pa-2">
+          <p class="text-black">Name: {{ globaldata.Name }}</p>
+          <p class="text-black">Mobile Number: {{ globaldata.MobileNum }}</p>
+          <p class="text-black">Address: {{ globaldata.Address1 }}</p>
+          <p class="text-black">Proof Type: {{ globaldata.ProofType }}</p>
+          <p class="text-black">Proof ID: {{ globaldata.ProofDtails }}</p>
+          <p class="text-black">Place: {{ globaldata.Place }}</p>
+          <p class="text-black">Status: {{ globaldata.Status }}</p>
+        </div>
+        <div class="w-100 d-flex ga-1">
+          <div class="w-100"><v-btn class="bg-yellow" @click="editdata(globaldata.Loan_appid)" block>Edit</v-btn></div>
+          <div class="w-100"><v-btn class="bg-indigo" @click="selectloandata(globaldata.Loan_Number)" block>Select</v-btn></div>
+        </div>
       </v-card>
-    </v-bottom-sheet>
+    </div>
+  </div>
+    </div>
+
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch , onBeforeMount} from 'vue';
+import logo from '~/components/logo.vue'
+import { ref, watch, computed, onBeforeMount } from 'vue';
+import CheckboxButton from '~/components/CheckboxButton.vue';
+import { useRouter } from 'vue-router';
 import CryptoJS from 'crypto-js';
-import { useRoute, useRouter } from 'vue-router';
-const router = useRouter()
+
+
+
 const isAuthenticated = ref(false)
+const errorpopup = ref(false)
+const errormessage = ref(null)
+
+const loading=ref(false)
+const datashow=ref(true)
+const deviceHeight = ref(0)
+const box1Height = ref(0)
+const box2Height = ref(0)
+const tab = ref(null)
+
+const nodata=ref('')
+const phoneNumber = ref('')
+
+const place = ref('')
+const name = ref('')
+
+const proofid=ref('')
+
+    const options = ref([
+      { label: 'AADHAR ID', value: 'AADHAR ID' },
+      { label: 'VOTER ID', value: 'VOTER ID' },
+      { label: 'DRIVING LICENCE', value: 'DRIVING LICENCE' },
+      { label: 'RATION CARD', value: 'RATION CARD' },
+      { label: 'BANK PASSBOOK', value: 'BANK PASSBOOK' },
+      { label: 'PASSPORT', value: 'PASSPORT' },
+      { label: 'OTHER', value: 'OTHER' },
+      { label: 'DIGI LOCKER', value: 'DIGI LOCKER' },
+    ]);
+
+  const selectedOption = ref('');
 
 onBeforeMount(() => {
   const token = localStorage.getItem('token')
-  
+
   if (!token) {
-   
+
     router.replace('/login')
   } else {
-    
+
     isAuthenticated.value = true
   }
 })
 
-const box1 = ref(0);
-const box2 = ref(0);
-const weight = ref('');
-const details = ref('');
-const name = ref('');
-const address = ref('');
-const mobilenumber = ref('');
-const idtype = ref('');
-const idnumber = ref('');
-const loannumber = ref('');
-const loantype = ref('');
-const loanvalue = ref('');
-const loandate = ref('');
-const currentdate = ref(new Date().toISOString().split('T')[0]);
 
-const discountRate = ref('');
-const mydate = ref('');
-const total = ref(0);
-const givenamount = ref(0);
-const interestamount = ref(0);
-const offbook = ref(0);
-const route = useRoute();
-const secretKey = 'loannumber123456';
-const encryptedId = route.query.encryptedId;
-let decryptedId = null;
-const monthsval=ref('')
-const formattedDate = currentdate.value.split('-').reverse().join('-');
-const sheet=ref(false)
-const tab=ref(null)
-const days=ref('')
-const roundmonthv=ref('')
-const mdayv=ref('')
-const rm=ref('')
-const dialog=ref(false)
-const error=ref(null)
-const loanappid=ref('')
-const appid=ref('')
+const updateSizes = () => {
+  deviceHeight.value = window.innerHeight
+  box1Height.value = deviceHeight.value * 0.10
+ box2Height.value = deviceHeight.value *0.90
+}
 
-const nproof=ref('')
-const nperson=ref('')
-const nproul=ref('')
-const setHeights = () => {
-  const height = window.innerHeight;
-  box1.value = height * 0.05; // 5% of the height
-  box2.value = height * 0.95;  // 90% of the height
- 
-};
 
 onMounted(() => {
-  setHeights();
-  window.addEventListener('resize', setHeights);
+  updateSizes()
+  window.addEventListener('resize', updateSizes) // Update sizes on window resize
+})
 
-  return () => {
-    window.removeEventListener('resize', setHeights);
-  };
-});
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateSizes) // Clean up event listener
+})
 
-if (encryptedId) {
-        try {
-          const bytes = CryptoJS.AES.decrypt(encryptedId, secretKey);
-          decryptedId = bytes.toString(CryptoJS.enc.Utf8);
+const validateInput = () => {
+  phoneNumber.value = phoneNumber.value.replace(/\D/g, "").slice(0, 10);
+};
+
+const validateLength = () => {
+  return phoneNumber.value.length === 10;
+};
+
+const allowOnlyAlphabets = (event) => {
+  const char = String.fromCharCode(event.keyCode || event.which);
+  const pattern = /^[a-zA-Z]+$/;
+
+  if (!pattern.test(char)) {
+    event.preventDefault();
+  }
+};
+
+const datauser=ref([])
+const userdata=async()=>{
+      loading.value=true
+      datashow.value=false
+      const apiurl='https://vaanam.w3webtechnologies.co.in/loandb/getlastdata_loan.php'
+      try {
+        const response=await fetch(apiurl,{
+          method:"GET",
+          
+        })
+        if(!response.ok){
+          throw new Error('Failed your response try again!');
+          }
+          else{
+            const data=await response.json() 
+            if(data.length==0){
+              nodata.value='No Data Found'
+              datauser.value=[]
+            }
+            else{
+              datauser.value=data  
+               nodata.value=''
+            }  
+         
+          }
         } catch (error) {
-          console.error('Decryption error:', error);
+          errorpopup.value=true
+    errormessage.value = error.message
         }
-      }
-  
-      const loansearchpp = async () => {
-        const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/get_loanrow.php';
-        const formdata = new FormData();
-        formdata.append('loannumber', decryptedId);
-  
-        try {
-          const response = await fetch(apiurl, { method: 'POST', body: formdata });
-          if (!response.ok) throw new Error('Failed to fetch response. Try again!');
-          const data = await response.json();
-          mydate.value = data[0].Loan_Date;
-          weight.value = data[0].Weight;
-          loannumber.value = data[0].Loan_Number;
-          loantype.value = data[0].Loan_Type;
-          loanvalue.value = data[0].Loan_Value;
-          loandate.value = formatDate(data[0].Loan_Date);
-          details.value = data[0].Pawn_Details;
-          name.value = data[0].Name;
-          mobilenumber.value = data[0].MobileNum;
-          address.value = data[0].Address1;
-          idtype.value = data[0].ProofType;
-          idnumber.value = data[0].ProofDtails;
-          loanappid.value=data[0].Loan_appid
-          appid.value=data[0].App_id
-          nproof.value=data[0].nProof
-          nperson.value=data[0].nPerson
-          nproul.value=data[0].nPorul
-          await interestval(data);
-          calculation();
-        } catch (error) {
-          console.error(error.message);
-        }
-      };
-  
-      const formatDate = (dateString) => {
-        const [year, month, day] = dateString.split('-');
-        return `${day}-${month}-${year}`;
-      };
-  
-      const interestval = async (loanData) => {
-        const apiurl = 'http://vaanam.w3webtechnologies.co.in/loandb/calculate_condition.php';
-        const formdata = new FormData();
-        formdata.append('loantype', loanData[0].Loan_Type);
-        formdata.append('loanvalue', loanData[0].Loan_Value);
-  
-        try {
-          const response = await fetch(apiurl, { method: 'POST', body: formdata });
-          if (!response.ok) throw new Error('Failed to fetch response. Try again!');
-          const data = await response.json();
-          discountRate.value = parseFloat(data[0].DiscountPeriod) || 0; // Convert to number
-          //calculation();
-        } catch (error) {
-          console.error('Interest calculation error:', error.message);
-        }
-      };
-  
-
-      const perval=ref(0)
-      
-      const calculation = () => {
-        const loanamount = parseFloat(loanvalue.value) || 0;
-        const interest = discountRate.value || 0;
-      //  const interest = parseFloat(discountRate.value.replace('%', '')) || 0;
-        const loanDate = new Date(mydate.value);
-        const returnDate = new Date(currentdate.value);
-  
-        if (isNaN(loanamount) || isNaN(interest)) {
-        console.error('Invalid values in calculation.');
-        return;
-      }
-        const timeDiff = returnDate - loanDate;
-        const diffDays = timeDiff / (1000 * 3600 * 24);
-        days.value=diffDays
-        const months = Math.max(0, Math.round(diffDays / 30));
-        rm.value=months
-        const fltmonth=months-1
-        monthsval.value=fltmonth
-        const interestPerMonth = (loanamount * interest/ 100)  / 12;
-        const totalInterest = interestPerMonth * fltmonth;
-        interestamount.value = totalInterest.toFixed(2);
-        total.value = (loanamount + totalInterest).toFixed(2);
-
-
-
-        const roundmonth = Math.floor(diffDays / 30);  // Divide by 30 to get full months
-        const mday = diffDays % 30; 
-        roundmonthv.value=roundmonth
-        mdayv.value=mday 
-
-  
-        const givenAmountValue = parseFloat(givenamount.value) || 0;
-
-
-
-        const intamt=((interest/100)/12) *loanamount
-        perval.value=intamt.toFixed(2)
-
-       
-        
-        if (givenAmountValue >= total.value) {
-          offbook.value = (givenAmountValue - total.value).toFixed(2);
-        } 
-
-        else if(total.value > givenAmountValue){
-          offbook.value = 0;
-          interestamount.value=0
-          let excess_amount=givenAmountValue-loanvalue.value
-          interestamount.value=excess_amount
-        }
-        else {
-          offbook.value = 0;
+        finally{
+          loading.value=false
+          datashow.value=true
         }
 
-        
-      };
-  
-      const handleDiscountRateInput = () => {
-        calculation();
-      };
-  
-      const handleGivenAmountInput = () => {
-        calculation();
-      };
-  
-      watch([currentdate, discountRate, givenamount], calculation);
-  
-      loansearchpp();
-const handleSubmit = async () => {
-  if (
-    !loannumber.value || 
-    !loanvalue.value || 
-    !loantype.value || 
-    !loandate.value || 
-    !currentdate.value || 
-    !discountRate.value || 
-    !givenamount.value || 
-    !interestamount.value || 
-    (offbook.value == null || String(offbook.value).trim() === '')
-  ) {
-    error.value = 'Please fill in all fields';
-    console.log('Error detected');
-    console.log(`offbook value: ${offbook.value}`);
-    return;
   }
 
-  await calculationSubmission();
- 
-};
-const calculationSubmission = async () => {
-  const apiUrl = 'http://localhost/loan db/calculation.php';
-  const formData = new FormData();
+  userdata()
 
-  formData.append('appid', appid.value);
-  formData.append('loanappid', loanappid.value);
-  formData.append('loannumber', loannumber.value);
-  formData.append('loanvalue', loanvalue.value);
-  formData.append('loantype', loantype.value);
-  formData.append('loandate', loandate.value);
-  formData.append('totalamount', total.value);
-  formData.append('interest', discountRate.value);
-  formData.append('loanclosedate', currentdate.value);
-  formData.append('givenamount', givenamount.value);
-  formData.append('interestamount', interestamount.value);
-  formData.append('offbook', offbook.value);
+  const filterdata=async(filtervalue)=>{
+    loading.value=true
+    datashow.value=false
+    const apiurl='https://vaanam.w3webtechnologies.co.in/loandb/loan_search_data.php'
+    const formdata=new FormData()
+    if(filtervalue=='mobile'){
+      formdata.append('mobilenumber', phoneNumber.value)
+      formdata.append('place', '')
+    }
+    else if(filtervalue=='nameplace'){
+      formdata.append('name', name.value)
+      formdata.append('place', place.value)
+    }
+    else if(filtervalue=='proof'){
+      formdata.append('proofid', proofid.value)
+      formdata.append('prooftype', selectedOption.value)
+    }
+    try {
+      const response=await fetch(apiurl,{
+          method:"POST",
+          body:formdata
+        })
 
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      body: formData
-    });
+        if(!response.ok){
+          throw new Error('Failed your response try again!');
+          }
+          else{
+            const data=await response.json()
+            if(data.length==0){
+              nodata.value='No Data Found'
+              datauser.value=[]
+            }
+            else{
+              datauser.value=data  
+               nodata.value=''
+            }  
+         
+           
+          }
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch response. Please try again!');
+    } catch (error) {
+      errorpopup.value=true
+      errormessage.value = error.message
+    }
+    finally{
+      loading.value=false
+    datashow.value=true
     }
 
-    const data = await response.json();
-
-    if (data.message === 'ok') {
-      status()
-     
-    } 
-   
-  } catch (err) {
-    console.error('Error submitting calculation:', err.message);
-    error.value = err.message; // Ensure 'error' is properly defined
-  } finally {
-    dialog.value = false; // Ensure 'dialog' is properly defined
   }
-};
-
-
-
-const status = async () => {
-  const apiUrl = 'http://localhost/loan db/closed.php';
-  const formData = new FormData();
-
-  formData.append('appid', appid.value);
-  formData.append('loanappid', loanappid.value);
-  formData.append('loannumber', loannumber.value);
-  formData.append('status', 'Close');
-
-
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      body: formData
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch response. Please try again!');
-    }
-
-    const data = await response.json();
-
-  } catch (err) {
-   
-    error.value = err.message; 
+  const router=useRouter()
+  const secretKey = "appidsecreatekey001";
+  const editdata=(loanid)=>{
+    const encryptedValue = CryptoJS.AES.encrypt(loanid, secretKey).toString();
+    router.push({ path: '/new_loan', query: { data: encodeURIComponent(encryptedValue),  enable: 'true' } });
   }
-};
 
 
-
-  const remove=()=>{
-    error.value=false
-  }
-    
-  
-     
-  
+const selectloandata=(loannumber)=>{
+  const encryptedValue = CryptoJS.AES.encrypt(loannumber, secretKey).toString();
+  router.push({ path: '/calculationform', query: { data: encodeURIComponent(encryptedValue) } });
+}
 </script>
 
-<style scoped>
-.tab-one-active {
-  background-color: blue !important; /* Tab 1 active background color */
-  color: white !important;          /* Adjust text color for visibility */
+<style>
+.cont {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 300px; /* Set a reasonable minimum height */
+  max-height: calc(100vh - 150px); /* Adjust based on header/footer heights */
 }
-
-.tab-two-active {
-  background-color: red !important; /* Tab 2 active background color */
-  color: white !important;
-}
-
-.tab-three-active {
-  background-color: green !important; /* Tab 3 active background color */
-  color: white !important;
-}
-.tab-four-active {
-  background-color: green !important; /* Tab 3 active background color */
-  color: white !important;
-}
-
-
 </style>

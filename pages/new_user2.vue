@@ -5,7 +5,7 @@
   </div>
     <form @submit.prevent="handleSubmit" v-if="userform">
       <div v-if="errorpopup" style="position: absolute; width: 100%; z-index: 10;">
-        <v-alert  type="error">
+        <v-alert  type="error"  @click="closepopup()">
           {{ errormessage }}
         </v-alert>
 
@@ -369,6 +369,9 @@ const back = () => {
   router.push({ path: '/new_user', query: { data: encodeURIComponent(encryptedValue) } });
 };
 
+const closepopup=()=>{
+  errorpopup.value=false
+}
 </script>
 
 <style></style>

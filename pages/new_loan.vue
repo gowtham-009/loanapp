@@ -4,7 +4,7 @@
       <v-progress-circular color="purple" indeterminate></v-progress-circular>
     </div>
     <div v-if="errorpopup" style="position: absolute; width: 100%; z-index: 10;">
-      <v-alert type="error">
+      <v-alert type="error" @click="closepopup()">
         {{ errormessage }}
       </v-alert>
 
@@ -694,6 +694,10 @@ const update_data = async () => {
       successpopup.value=false
     }, 1000);
   }
+}
+
+const closepopup=()=>{
+  closepopup.value=false
 }
 </script>
 

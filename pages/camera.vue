@@ -1,64 +1,199 @@
 <template>
   <div>
-    <!-- Row 1 -->
-    <input type="number" v-model.number="val1_1" placeholder="Enter first number">
-    <input type="number" v-model.number="val2_1" placeholder="Enter second number">
-    <input type="text" :value="val3_1" placeholder="Result" readonly>
-  </div>
+  <div class="w-100  bg-blue" :style="{ height: boxex1Height + 'px' }"></div>
+   <div class="w-100 scroller" :style="{ height: boxex2Height + 'px' }">
+      <div class="w-100" :style="{ height: tabHeight + 'px' }" style="border: 1px solid red;">
 
-  <div>
-    <!-- Row 2 -->
-    <input type="number" v-model.number="val1_2" placeholder="Enter first number">
-    <input type="number" v-model.number="val2_2" placeholder="Enter second number">
-    <input type="text" :value="val3_2" placeholder="Result" readonly>
-  </div>
+      </div>
+      <div class="w-100 scroller" :style="{ height: cardHeight + 'px' }" style="border: 1px solid black;">
+        <v-card
+   
+    prepend-icon="$vuetify"
+    subtitle="The #1 Vue UI Library"
+   class="w-100"
+  >
+    <template v-slot:title>
+      <span class="font-weight-black">Welcome to Vuetify</span>
+    </template>
 
-  <div>
-    <!-- Row 3 -->
-    <input type="number" v-model.number="val1_3" placeholder="Enter first number">
-    <input type="number" v-model.number="val2_3" placeholder="Enter second number">
-    <input type="text" :value="val3_3" placeholder="Result" readonly>
-  </div>
+    <v-card-text class="bg-surface-light pt-4">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
+    </v-card-text>
+  </v-card>
 
-  <div>
-    <strong>Total: </strong>
-    <input type="text" :value="total" placeholder="Total Sum" readonly>
+  <v-card
+   
+   prepend-icon="$vuetify"
+   subtitle="The #1 Vue UI Library"
+  class="w-100"
+ >
+   <template v-slot:title>
+     <span class="font-weight-black">Welcome to Vuetify</span>
+   </template>
+
+   <v-card-text class="bg-surface-light pt-4">
+     Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
+   </v-card-text>
+ </v-card>
+
+ <v-card
+   
+   prepend-icon="$vuetify"
+   subtitle="The #1 Vue UI Library"
+  class="w-100"
+ >
+   <template v-slot:title>
+     <span class="font-weight-black">Welcome to Vuetify</span>
+   </template>
+
+   <v-card-text class="bg-surface-light pt-4">
+     Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
+   </v-card-text>
+ </v-card>
+
+ <v-card
+   
+   prepend-icon="$vuetify"
+   subtitle="The #1 Vue UI Library"
+  class="w-100"
+ >
+   <template v-slot:title>
+     <span class="font-weight-black">Welcome to Vuetify</span>
+   </template>
+
+   <v-card-text class="bg-surface-light pt-4">
+     Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
+   </v-card-text>
+ </v-card>
+
+
+ <v-card
+   
+   prepend-icon="$vuetify"
+   subtitle="The #1 Vue UI Library"
+  class="w-100"
+ >
+   <template v-slot:title>
+     <span class="font-weight-black">Welcome to Vuetify</span>
+   </template>
+
+   <v-card-text class="bg-surface-light pt-4">
+     Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
+   </v-card-text>
+ </v-card>
+
+
+ <v-card
+   
+   prepend-icon="$vuetify"
+   subtitle="The #1 Vue UI Library"
+  class="w-100"
+ >
+   <template v-slot:title>
+     <span class="font-weight-black">Welcome to Vuetify</span>
+   </template>
+
+   <v-card-text class="bg-surface-light pt-4">
+     Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
+   </v-card-text>
+ </v-card>
+
+ <v-card
+   
+   prepend-icon="$vuetify"
+   subtitle="The #1 Vue UI Library"
+  class="w-100"
+ >
+   <template v-slot:title>
+     <span class="font-weight-black">Welcome to Vuetify</span>
+   </template>
+
+   <v-card-text class="bg-surface-light pt-4">
+     Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
+   </v-card-text>
+ </v-card>
+
+ <v-card
+   
+   prepend-icon="$vuetify"
+   subtitle="The #1 Vue UI Library"
+  class="w-100"
+ >
+   <template v-slot:title>
+     <span class="font-weight-black">Welcome to Vuetify</span>
+   </template>
+
+   <v-card-text class="bg-surface-light pt-4">
+     Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
+   </v-card-text>
+ </v-card>
+
+ <v-card
+   
+   prepend-icon="$vuetify"
+   subtitle="The #1 Vue UI Library"
+  class="w-100"
+ >
+   <template v-slot:title>
+     <span class="font-weight-black">Welcome to Vuetify</span>
+   </template>
+
+   <v-card-text class="bg-surface-light pt-4">
+     Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!
+   </v-card-text>
+ </v-card>
+</div>
+   </div>
+   <div class="w-100 bg-blue" :style="{ height: boxex3Height + 'px' }"></div>
+
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
 
-// Row 1
-const val1_1 = ref(2);
-const val2_1 = ref(0);
-const val3_1 = computed(() => (val1_1.value * val2_1.value).toFixed(2));
+import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue';
+const deviceWidth = ref(0);
+const deviceHeight = ref(0);
+const boxex1Height = ref(0);
+const boxex2Height = ref(0);
+const boxex3Height = ref(0);
+const tabHeight=ref(0);
+const cardHeight=ref(0)
 
-// Row 2
-const val1_2 = ref(3);
-const val2_2 = ref(0);
-const val3_2 = computed(() => (val1_2.value * val2_2.value).toFixed(2));
+const updateDeviceDimensions = () => {
+    deviceWidth.value = window.innerWidth;
+    deviceHeight.value = window.innerHeight;
 
-// Row 3
-const val1_3 = ref(4);
-const val2_3 = ref(0);
-const val3_3 = computed(() => (val1_3.value * val2_3.value).toFixed(2));
+    // Calculate heights for each box based on percentages
+    boxex1Height.value = Math.floor(deviceHeight.value * 0.05);
+    boxex2Height.value = Math.floor(deviceHeight.value * 0.90);
+    boxex3Height.value = Math.floor(deviceHeight.value * 0.05);
+    tabHeight.value= Math.floor(  boxex2Height.value * 0.40);
+    cardHeight.value=Math.floor(  boxex2Height.value * 0.60);
+};
 
-// Total Calculation
-const total = computed(() => {
-  return (
-    parseFloat(val3_1.value) +
-    parseFloat(val3_2.value) +
-    parseFloat(val3_3.value)
-  ).toFixed(2); // Ensures 2 decimal places
+onMounted(() => {
+    updateDeviceDimensions(); // Initial call to set dimensions on component mount
+    window.addEventListener('resize', updateDeviceDimensions); // Listen for window resize events
 });
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateDeviceDimensions); // Clean up: remove resize event listener
+});
+
 </script>
 
-<style scoped>
-input {
-  margin: 5px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+<style>
+html,
+body {
+    overflow-y: hidden;
+
 }
+
+.scroller {
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+
 </style>

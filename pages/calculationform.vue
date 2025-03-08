@@ -1,7 +1,8 @@
 <template>
   <div v-if="isAuthenticated">
     <div class="w-100" v-if="errorpopup" style="position: absolute;">
-      <v-alert type="error">{{ errormessage }}
+      <v-alert type="error" @click="closepopup()">
+        {{ errormessage }}
       </v-alert>
     </div>
     <div class="d-flex justify-center h-screen d-flex justify-center align-center" v-if="loading">
@@ -726,7 +727,8 @@ const statusclose = async () => {
 
   } catch (err) {
    
-    error.value = err.message; 
+    errorpopup.value=true
+    errormessage.value=err.message
   }
 };
 
@@ -734,7 +736,9 @@ const statusclose = async () => {
 
 
 
-
+const closepopup=()=>{
+  closepopup.value=false
+}
 </script>
 
 <style></style>

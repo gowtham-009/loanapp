@@ -1,6 +1,16 @@
 <template>
     <div v-if="isAuthenticated" class="main-container d-flex justify-space-between flex-column w-100 scroller"
         :style="{ height: deviceHeight + 'px' }">
+
+        <div v-if="successpopup" style="position: absolute; width: 100%; z-index: 10;">
+      <v-alert title="Success" type="success">
+        {{ successmesage }}
+      </v-alert>
+    </div>
+        <div class="h-screen d-flex justify-center align-center" v-if="loading">
+            <v-progress-circular color="purple" indeterminate></v-progress-circular>
+        </div>
+      <div v-if="content">
         <div class="w-100  bg-blue" :style="{ height: boxex1Height + 'px' }"></div>
         <div class="w-100 scroller" :style="{ height: boxex2Height + 'px' }">
 
@@ -243,6 +253,7 @@
             </div>
         </div>
         <div class="w-100  bg-blue" :style="{ height: boxex3Height + 'px' }"></div>
+      </div>
     </div>
 
 </template>
@@ -252,6 +263,7 @@
 import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue';
 import { useRouter } from 'vue-router'
 
+const content=ref(true)
 
 const router = useRouter()
 const isAuthenticated = ref(false)
@@ -267,7 +279,8 @@ onBeforeMount(() => {
         isAuthenticated.value = true
     }
 })
-const alertmsg = ref(false)
+const successpopup=ref(false)
+const successmesage=ref(null)
 // Reactive state
 const deviceWidth = ref(0);
 const deviceHeight = ref(0);
@@ -306,8 +319,8 @@ const notes10 = ref(0);
 
 
 
-const loading = ref(true);
-const error = ref(null);
+const loading = ref(false);
+
 
 
 const previousamount = ref("0")
@@ -374,7 +387,8 @@ const currentDateTime = ref(getFormattedDateTime());
 
 const balance_check = async () => {
     loading.value = true;
-    error.value = null;
+    content.value=false
+
     const balancecheck_api = 'https://vaanam.w3webtechnologies.co.in/loandb/balance.php';
     const formdata = new FormData();
     formdata.append('date', formattedDate.value);
@@ -403,10 +417,17 @@ const balance_check = async () => {
 
         }
     } catch (err) {
-        error.value = err.message;
+       console.log(err.message)
     } finally {
         loading.value = false;
-        alertmsg.value = true
+        content.value=true
+
+        successpopup.value=true
+        successmesage.value='Your Amount Successfully Added'
+
+        setTimeout(() => {
+            successpopup.value=false
+        }, 1000);
 
     }
 };

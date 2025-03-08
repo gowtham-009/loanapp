@@ -1,7 +1,7 @@
 <template>
   <div v-if="isAuthenticated">
     <div v-if="errorpopup" style="position: absolute; width: 100%; z-index: 10;">
-      <v-alert type="error">
+      <v-alert type="error" @click="closepopup()">
         {{ errormessage }}
       </v-alert>
     </div>
@@ -880,6 +880,9 @@ const settinginsertdata = async () => {
   isDisabled.value = true
 }
 
+const closepopup=()=>{
+  closepopup.value=false
+}
 </script>
 
 <style>
