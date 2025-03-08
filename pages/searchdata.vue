@@ -75,6 +75,7 @@
           <p class="text-black">Place: {{ globaldata.Place }}</p>
           <p class="text-black">Status: {{ globaldata.Status }}</p>
         </div>
+
         <div class="w-100 d-flex ga-1">
           <div class="w-100"><v-btn class="bg-yellow" @click="editdata(globaldata.Loan_appid)" block>Edit</v-btn></div>
           <div class="w-100"><v-btn class="bg-indigo" @click="selectloandata(globaldata.Loan_Number)" block>Select</v-btn></div>
@@ -280,7 +281,7 @@ const selectloandata=(loannumber)=>{
 .cont {
   flex-grow: 1;
   overflow-y: auto;
-  min-height: 300px; /* Set a reasonable minimum height */
-  max-height: calc(100vh - 150px); /* Adjust based on header/footer heights */
+  min-height: 300px;
+  max-height: calc(100vh - 300px); 
 }
 </style>
