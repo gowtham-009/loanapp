@@ -41,7 +41,7 @@
           </v-row>
           <v-row no-gutters class="flex-grow-1">
             <v-col class="d-flex">
-              <v-sheet class="pa-2 ma-2 flex-grow-1 bg-red  d-flex justify-end align-end">
+              <v-sheet class="pa-2 ma-2 flex-grow-1 bg-red d-flex justify-end align-end">
                 <h1 class="text-end">Ledger<br>Reports</h1>
               </v-sheet>
             </v-col>
@@ -54,13 +54,14 @@
 
           <v-row no-gutters class="flex-grow-1 d-flex justify-end">
             <v-col class="d-flex" cols="6">
-              <v-sheet class="pa-2 ma-2 flex-grow-1 bg-black d-fle justify-end align-center">
+              <v-sheet class="pa-2 ma-2 flex-grow-1 bg-black d-flex justify-end align-center">
                 <nuxt-link to="/login" class="text-h4 text-white" style="text-decoration: none;">
                   <logout/>
                 </nuxt-link>
               </v-sheet>
             </v-col>
           </v-row>
+
         </v-container>
       </div>
     </div>
